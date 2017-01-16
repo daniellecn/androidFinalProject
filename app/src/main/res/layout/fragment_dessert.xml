@@ -1,0 +1,85 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    style="@style/AppTheme"
+    tools:context="com.example.finalproject.Fragments.DessertFragment">
+
+    <TableLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="10dp">
+
+        <TableRow
+            android:layout_margin="10dp">
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:src="@drawable/dessert"
+                android:id="@+id/dishImg" />
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp">
+            <TextView
+                android:text="Macrons"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="22dp"
+                android:textStyle="bold"
+                android:id="@+id/dishLable" />
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp">
+            <TextView
+                android:text="@string/longText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dishDesc"
+                android:textSize="18dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp">
+            <TextView
+                android:text="@string/cost"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_weight="1"
+                android:textSize="18dp"/>
+
+            <TextView
+                android:text="1.5$"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/dishCost"
+                android:textSize="18dp"/>
+        </TableRow>
+
+        <TableRow
+            android:layout_margin="10dp">
+            <TextView
+                android:text="@string/dates"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:textSize="18dp"/>
+
+            <TextView
+                android:text="01.01.2016-01.02.2016"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp"
+
+                android:id="@+id/dishDates"/>
+        </TableRow>
+
+    </TableLayout>
+
+
+</LinearLayout>

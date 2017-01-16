@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="screenBackground">#dceff5</color>
+    <color name="actionBar">#B4E5F7</color>
+    <color name="itemBackground">#BFB4E5F7</color>
+    <color name="buttonBackground">#E2E2E2</color>
+    <color name="signButtonBackground">#66E2E2E2</color>
+    <color name="whiteBackground">#FFFFFF</color>
+    <color name="cardColor">#b4e5f7</color>
+</resources>

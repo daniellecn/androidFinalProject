@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@drawable/card_shape"
+            android:layout_margin="10dp">
+        <LinearLayout
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_margin="5dp"
+            android:layout_marginBottom="20dp"
+            android:layout_gravity="center"
+            android:background="@color/cardColor">
+
+                <ImageView
+                    android:id="@+id/dishRowImage"
+                    android:layout_width="100dp"
+                    android:layout_height="80dp"
+                    android:src="@drawable/dessert"
+                    android:layout_gravity="center"
+                    />
+        </LinearLayout>
+
+        <LinearLayout
+            android:background="@color/cardColor"
+            android:layout_width="100pt"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+                <TextView
+                    android:text="Lable"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/cardColor"
+                    android:textSize="22dp"
+                    android:id="@+id/dishRowLable" />
+
+                <TextView
+                    android:text="@string/longText"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/cardColor"
+                    android:textSize="18dp"
+                    android:id="@+id/dishRowDesc"
+                    />
+        </LinearLayout>
+        </LinearLayout>
+</LinearLayout>

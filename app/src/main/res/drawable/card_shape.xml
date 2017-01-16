@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" android:shape="rectangle" >
+    <corners
+        android:radius="20dp" />
+    <gradient
+        android:angle="45"
+        android:centerX="35%"
+        android:type="linear"
+        android:startColor="@color/cardColor"
+        android:centerColor="@color/cardColor"
+        android:endColor="@color/cardColor"
+        />
+    <padding
+        android:left="5dp"
+        android:top="5dp"
+        android:right="5dp"
+        android:bottom="5dp"
+        />
+</shape>
