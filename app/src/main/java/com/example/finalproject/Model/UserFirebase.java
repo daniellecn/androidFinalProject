@@ -59,4 +59,10 @@ public class UserFirebase {
             }
         });
     }
+
+    public static void addUser(User user){
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("users").child(user.getName());
+        myRef.setValue(user);
+    }
 }

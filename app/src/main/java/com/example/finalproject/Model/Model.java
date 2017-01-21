@@ -52,27 +52,15 @@ public class Model {
         return dessertData;
     }
 
-    private void addUser(User user){
-        modelFirebase.addUser(user);
-    }
-
     public void logIn(User user, logInListener listener){
         modelFirebase.userLogIn(user, listener);
     }
 
     public void signUp(final User user, final successListener listener){
-        modelFirebase.userSignUp(user, new signUpListener() {
-            @Override
-            public void onComplete(boolean isExist) {
-                if (isExist){
-                    // TODO: message
-                    listener.onResult(false);
-                }
-                else{
-                    addUser(user);
-                    listener.onResult(true);
-                }
-            }
-        });
+        modelFirebase.userSignUp(user, listener);
+    }
+
+    public void addDessert(Dessert dessert){
+        //modelFirebase.addDessert(dessert);
     }
 }
