@@ -1,5 +1,11 @@
 package com.example.finalproject.Model;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.ParseException;
 import java.util.Date;
 import java.util.LinkedList;
@@ -11,11 +17,25 @@ import java.util.List;
 
 public class Model {
     final private static Model instance = new Model();
-
     private List<Dessert> dessertData = new LinkedList<Dessert>();
+
+    private ModelFirebase modelFirebase = new ModelFirebase();
+    private UserFirebase userFirebase = new UserFirebase();
 
     public static Model instance(){
         return instance;
+    }
+
+    public interface logInListener {
+        void onComplete(boolean isLogIn);
+    }
+
+    public interface signUpListener{
+        void onComplete(boolean isExist);
+    }
+
+    public interface successListener {
+        public void onResult(boolean result);
     }
 
     private Model() {
@@ -30,5 +50,29 @@ public class Model {
 
     public List<Dessert> getDessertData() {
         return dessertData;
+    }
+
+    private void addUser(User user){
+        modelFirebase.addUser(user);
+    }
+
+    public void logIn(User user, logInListener listener){
+        modelFirebase.userLogIn(user, listener);
+    }
+
+    public void signUp(final User user, final successListener listener){
+        modelFirebase.userSignUp(user, new signUpListener() {
+            @Override
+            public void onComplete(boolean isExist) {
+                if (isExist){
+                    // TODO: message
+                    listener.onResult(false);
+                }
+                else{
+                    addUser(user);
+                    listener.onResult(true);
+                }
+            }
+        });
     }
 }

@@ -21,4 +21,11 @@
     <string name="title_activity_list_dish"></string>
     <string name="title_activity_searchable">searchableActivity</string>
     <string name="title_activity_add_dessert">AddDessertActivity</string>
+
+
+
+
+    <!--Messages-->
+    <string name="signupError">Username already taken</string>
+    <string name="loginError">Username or Password incorrect</string>
 </resources>

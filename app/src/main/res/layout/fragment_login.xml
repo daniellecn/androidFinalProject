@@ -18,7 +18,7 @@
             android:id="@+id/imageView" />
 
         <TextView
-            android:text="@string/email"
+            android:text="@string/name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
@@ -27,11 +27,11 @@
         <EditText
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textEmailAddress"
+            android:inputType="textPersonName"
             android:ems="10"
             android:layout_marginTop="8dp"
             android:layout_marginBottom="8dp"
-            android:id="@+id/loginEmail" />
+            android:id="@+id/loginName" />
 
         <TextView
             android:text="@string/password"
