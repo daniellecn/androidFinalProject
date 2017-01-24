@@ -45,7 +45,7 @@ public class SignupFragment extends Fragment {
                 EditText userPass = (EditText) view.findViewById(R.id.signPassword);
                 User user = new User(userName.getText().toString(), userPass.getText().toString());
 
-                Model.instance().signUp(user, new Model.successListener() {
+                Model.instance().signUp(user, new Model.SuccessListener() {
                     @Override
                     public void onResult(boolean result) {
                         if (result) {

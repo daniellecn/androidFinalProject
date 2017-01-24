@@ -12,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class UserFirebase {
 
-    public static void userLogIn(final User user, final Model.logInListener listener){
+    public static void userLogIn(final User user, final Model.LogInListener listener){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users").child(user.getName());
 
@@ -36,7 +36,7 @@ public class UserFirebase {
         });
     }
 
-    public static void userSignUp(User user, final Model.signUpListener listener){
+    public static void userSignUp(User user, final Model.SignUpListener listener){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users").child(user.getName());
 

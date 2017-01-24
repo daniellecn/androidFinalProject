@@ -59,7 +59,7 @@ public class LoginFragment extends Fragment {
                 EditText pass = (EditText) view.findViewById(R.id.loginPassword);
                 User user = new User (name.getText().toString(), pass.getText().toString());
 
-                Model.instance().logIn(user, new Model.logInListener() {
+                Model.instance().logIn(user, new Model.LogInListener() {
                     @Override
                     public void onComplete(boolean isLogIn) {
                         if (isLogIn){

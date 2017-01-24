@@ -11,13 +11,18 @@ public class Dessert {
     private int id;
     private String name;
     private String description;
-    private double cost;
-    private List<Date> datesAvailable;
+    private String imageUrl;
+    private String cost;
+    private String datesAvailable;
 
-    public Dessert(int id, String name, String description, double cost, List<Date> datesAvailable) {
+    public Dessert() {
+    }
+
+    public Dessert(int id, String name, String description, String imageUrl, String cost, String datesAvailable) {
         this.id = id;
         this.name = name;
         this.description = description;
+        this.imageUrl = imageUrl;
         this.cost = cost;
         this.datesAvailable = datesAvailable;
     }
@@ -46,19 +51,27 @@ public class Dessert {
         this.description = description;
     }
 
-    public double getCost() {
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
+    public void setImageUrl(String imageUrl) {
+        this.imageUrl = imageUrl;
+    }
+
+    public String getCost() {
         return cost;
     }
 
-    public void setCost(double cost) {
+    public void setCost(String cost) {
         this.cost = cost;
     }
 
-    public List<Date> getDatesAvailable() {
+    public String getDatesAvailable() {
         return datesAvailable;
     }
 
-    public void setDatesAvailable(List<Date> datesAvailable) {
+    public void setDatesAvailable(String datesAvailable) {
         this.datesAvailable = datesAvailable;
     }
 }

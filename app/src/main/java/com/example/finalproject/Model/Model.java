@@ -1,13 +1,7 @@
 package com.example.finalproject.Model;
 
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
+import android.graphics.Bitmap;
 
-import java.text.ParseException;
-import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -26,25 +20,36 @@ public class Model {
         return instance;
     }
 
-    public interface logInListener {
+    public interface LogInListener {
         void onComplete(boolean isLogIn);
     }
 
-    public interface signUpListener{
+    public interface SignUpListener{
         void onComplete(boolean isExist);
     }
 
-    public interface successListener {
+    public interface SuccessListener {
         public void onResult(boolean result);
+    }
+
+    public interface SaveImageListener{
+        public void fail();
+        public void complete(String url);
+    }
+
+    public interface GetImageListener{
+        public void onSccess(Bitmap image);
+        public void onFail();
+    }
+
+    public interface GetAllDessertsListener{
+        void onComplete(List<Dessert> students);
     }
 
     private Model() {
         for (int i =0;i<10;i++){
             Dessert st = null;
-            List<Date> dates = new LinkedList<Date>();
-            dates.add(new Date(2016, 12, 20));
-
-            dessertData.add(new Dessert(i, "name", "address", 0.5, dates));
+            dessertData.add(new Dessert(i, "name", "address", "blabla", "0.5$", "01/01/2017 - 06/01/2017"));
         }
     }
 
@@ -52,15 +57,19 @@ public class Model {
         return dessertData;
     }
 
-    public void logIn(User user, logInListener listener){
+    public void logIn(User user, LogInListener listener){
         modelFirebase.userLogIn(user, listener);
     }
 
-    public void signUp(final User user, final successListener listener){
+    public void signUp(final User user, final SuccessListener listener){
         modelFirebase.userSignUp(user, listener);
     }
 
-    public void addDessert(Dessert dessert){
-        //modelFirebase.addDessert(dessert);
+    public void addDessert(Dessert dessert, final SuccessListener listener){
+        modelFirebase.addDessert(dessert, listener);
+    }
+
+    public static int getNextDessertId() {
+        return 0;
     }
 }

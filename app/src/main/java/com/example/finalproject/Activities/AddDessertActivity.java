@@ -1,8 +1,13 @@
 package com.example.finalproject.Activities;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
+import android.widget.TextView;
 
 import com.example.finalproject.Fragments.AddDessertFragment;
 import com.example.finalproject.R;
@@ -19,6 +24,8 @@ public class AddDessertActivity extends Activity {
         fragTran.add(R.id.addContainer, addDessertFragment);
         fragTran.commit();
 
-    }
+        getActionBar().setIcon(R.color.colorPrimaryDark);
 
+        // TODO: be able to get id - for edit mode
+    }
 }

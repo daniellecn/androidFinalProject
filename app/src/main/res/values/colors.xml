@@ -11,4 +11,8 @@
     <color name="signButtonBackground">#66E2E2E2</color>
     <color name="whiteBackground">#FFFFFF</color>
     <color name="cardColor">#b4e5f7</color>
+
+    <!--Text Colors-->
+    <color name="grayText">#BDBDBD</color>
+    <color name="blackText">#000000</color>
 </resources>

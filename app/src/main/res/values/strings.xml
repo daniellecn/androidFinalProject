@@ -14,6 +14,10 @@
     <string name="longText">long text long text long text long text long text
     long text long text long text long text long text long text long text </string>
     <string name="search_hint">Search</string>
+    <string name="but_done">Done</string>
+    <string name="title_tab_start_date">Start date</string>
+    <string name="title_tab_end_date">End date</string>
+    <string name="enter_dates">Click to select dates</string>
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -22,10 +26,10 @@
     <string name="title_activity_searchable">searchableActivity</string>
     <string name="title_activity_add_dessert">AddDessertActivity</string>
 
-
-
-
+    
     <!--Messages-->
     <string name="signupError">Username already taken</string>
     <string name="loginError">Username or Password incorrect</string>
+    <string name="addedSuccessfuly">Dessert added successfully! </string>
+    <string name="errorAdding">Error adding, try again</string>
 </resources>

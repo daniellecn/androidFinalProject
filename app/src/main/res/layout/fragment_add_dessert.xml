@@ -17,18 +17,17 @@
             android:padding="8dp">
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
+                android:layout_height="180dp"
                 android:gravity="center"
                 android:src="@drawable/image_placeholder"
                 android:id="@+id/addImg" />
 
             <ImageButton
-                android:id="@+id/add_new"
+                android:id="@+id/addNew"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
                 android:layout_alignParentBottom="true"
-                android:layout_alignParentEnd="true"
-                android:layout_gravity="bottom|center"
                 android:adjustViewBounds="true"
                 android:background="@null"
                 android:paddingBottom="16dp"
@@ -101,6 +100,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/addCost"
+                android:maxLength="10"
                 android:layout_weight="3"
                 android:textSize="18dp"/>
 
@@ -120,11 +120,13 @@
                 android:textStyle="bold"
                 android:textSize="18dp"/>
 
-            <EditText
-                android:text="01.01.2016-01.02.2016"
+            <TextView
+                android:text="@string/enter_dates"
+                android:textColor="@color/grayText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
+                android:id="@+id/addDates"
                 android:textSize="18dp"/>
         </LinearLayout>
     </LinearLayout>

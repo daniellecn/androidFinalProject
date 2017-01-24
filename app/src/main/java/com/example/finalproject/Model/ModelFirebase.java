@@ -14,12 +14,12 @@ import static com.example.finalproject.Model.UserFirebase.addUser;
 
 public class ModelFirebase {
 
-    public void userLogIn(User user, Model.logInListener listener){
+    public void userLogIn(User user, Model.LogInListener listener){
         UserFirebase.userLogIn(user, listener);
     }
 
-    public void userSignUp(final User user, final Model.successListener listener){
-        UserFirebase.userSignUp(user, new Model.signUpListener() {
+    public void userSignUp(final User user, final Model.SuccessListener listener){
+        UserFirebase.userSignUp(user, new Model.SignUpListener() {
             @Override
             public void onComplete(boolean isExist) {
                 if (isExist){
@@ -33,7 +33,11 @@ public class ModelFirebase {
         });
     }
 
-    public void addDessert(Dessert dessert, Model.successListener listener) {
+    public void addDessert(Dessert dessert, Model.SuccessListener listener) {
         DessertFirebase.addDessert(dessert, listener);
+    }
+
+    public void getAllDesserts(final Model.GetAllDessertsListener listener){
+        DessertFirebase.getAllDesserts(listener);
     }
 }
