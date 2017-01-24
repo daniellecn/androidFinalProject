@@ -1,5 +1,8 @@
 package com.example.finalproject.Model;
 
+import android.content.Context;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
 
 import java.util.LinkedList;
@@ -11,6 +14,8 @@ import java.util.List;
 
 public class Model {
     final private static Model instance = new Model();
+
+
     private List<Dessert> dessertData = new LinkedList<Dessert>();
 
     private ModelFirebase modelFirebase = new ModelFirebase();
@@ -18,6 +23,13 @@ public class Model {
 
     public static Model instance(){
         return instance;
+    }
+
+    private Model() {
+        for (int i =0;i<10;i++) {
+            Dessert st = null;
+            dessertData.add(new Dessert(i, "name", "address", "blabla", "0.5$", "01/01/2017 - 06/01/2017"));
+        }
     }
 
     public interface LogInListener {
@@ -44,13 +56,6 @@ public class Model {
 
     public interface GetAllDessertsListener{
         void onComplete(List<Dessert> students);
-    }
-
-    private Model() {
-        for (int i =0;i<10;i++){
-            Dessert st = null;
-            dessertData.add(new Dessert(i, "name", "address", "blabla", "0.5$", "01/01/2017 - 06/01/2017"));
-        }
     }
 
     public List<Dessert> getDessertData() {
