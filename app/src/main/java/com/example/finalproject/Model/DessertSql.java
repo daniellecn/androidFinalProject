@@ -1,10 +1,19 @@
 package com.example.finalproject.Model;
 
 import android.content.ContentValues;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.net.Uri;
+import android.os.Environment;
 import android.util.Log;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -21,8 +30,21 @@ public class DessertSql {
     private static final String COST = "COST";
     private static final String DATES = "DATES";
 
+    public static void create(SQLiteDatabase db) {
+        db.execSQL("CREATE TABLE " + DESSERTS_TABLE + " (" +
+                ID          + " NUM PRIMARY KEY," +
+                NAME        + " TEXT," +
+                DESC        + " TEXT," +
+                IMAGE_URL   + " TEXT," +
+                COST        + " TEXT," +
+                DATES       + " TEXT );");
+    }
 
-    public static void addDessert(SQLiteDatabase writeableDatabase, Dessert dessert){
+    public static void dropTable(SQLiteDatabase db) {
+        db.execSQL("DROP TABLE " + DESSERTS_TABLE);
+    }
+
+    public static void addDessert(SQLiteDatabase db, Dessert dessert){
         ContentValues values = new ContentValues();
 
         // Set values
@@ -34,18 +56,18 @@ public class DessertSql {
         values.put(DATES, dessert.getDatesAvailable());
 
         // Add to local db
-        long rowId = writeableDatabase.insert(DESSERTS_TABLE, ID, values);
+        long rowId = db.insertWithOnConflict(DESSERTS_TABLE, ID, values,SQLiteDatabase.CONFLICT_REPLACE);
         if (rowId <= 0) {
             Log.e("SQLite","fail to insert into student");
         }
     }
 
-    public static Dessert getDessertById(SQLiteDatabase readableDatabase, String id)    {
+    public static Dessert getDessertById(SQLiteDatabase db, String id)    {
         // Set the selection parameters
         String[] selectArg = {id};
 
         // Get the dessert
-        Cursor cursor = readableDatabase.query(DESSERTS_TABLE, null, ID + " = ?", selectArg, null, null, null );
+        Cursor cursor = db.query(DESSERTS_TABLE, null, ID + " = ?", selectArg, null, null, null );
         Dessert dessert = null;
 
         if (cursor.moveToFirst() == true){
@@ -60,28 +82,14 @@ public class DessertSql {
         return dessert;
     }
 
-    public static List<Dessert> getAllDesserts(SQLiteDatabase readableDatabase){
+    public static List<Dessert> getAllDesserts(SQLiteDatabase db){
         List<Dessert> dessertList = null;
 
         // Get all the desserts
-        Cursor cursor = readableDatabase.query(DESSERTS_TABLE, null, null, null, null, null, null);
+        Cursor cursor = db.query(DESSERTS_TABLE, null, null, null, null, null, null);
 
         // Create the list
         return getDessertListFromCourse(cursor);
-    }
-
-    public static void create(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("CREATE TABLE " + DESSERTS_TABLE + " (" +
-                ID          + " NUM PRIMARY KEY," +
-                NAME        + " TEXT," +
-                DESC        + " TEXT," +
-                IMAGE_URL   + " TEXT," +
-                COST        + " TEXT," +
-                DATES       + " TEXT );");
-    }
-
-    public static void dropTable(SQLiteDatabase sqLiteDatabase) {
-        sqLiteDatabase.execSQL("DROP TABLE " + DESSERTS_TABLE);
     }
 
     private static List<Dessert> getDessertListFromCourse(Cursor cursor){
@@ -112,5 +120,45 @@ public class DessertSql {
         }
 
         return data;
+    }
+
+    public static double getLastUpdateDate(SQLiteDatabase db){
+        return LastUpdateSql.getLastUpdate(db,DESSERTS_TABLE);
+    }
+
+    public static void setLastUpdateDate(SQLiteDatabase db, double date){
+        LastUpdateSql.setLastUpdate(db,DESSERTS_TABLE, date);
+    }
+
+    // Save local
+    private void saveImageToFile(Bitmap imageBitmap, String imageFileName){
+        FileOutputStream fos;
+        OutputStream out = null;
+        try {
+            File dir = Environment.getExternalStoragePublicDirectory(
+                    Environment.DIRECTORY_PICTURES);
+            if (!dir.exists()) {
+                dir.mkdir();
+            }
+            File imageFile = new File(dir,imageFileName);
+
+            imageFile.createNewFile();
+
+            out = new FileOutputStream(imageFile);
+            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+            out.close();
+
+            //add the picture to the gallery so we dont need to manage the cache size
+            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+            Uri contentUri = Uri.fromFile(imageFile);
+            mediaScanIntent.setData(contentUri);
+            AppContext.getAppContext().sendBroadcast(mediaScanIntent);
+            Log.d("TAG","add image to cache: " + imageFileName);
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

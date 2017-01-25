@@ -1,7 +1,11 @@
 package com.example.finalproject.Model;
 
+import com.google.firebase.database.ServerValue;
+
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by Danielle Cohen on 04/01/2017.
@@ -14,6 +18,7 @@ public class Dessert {
     private String imageUrl;
     private String cost;
     private String datesAvailable;
+    private double lastUpdated;
 
     public Dessert() {
     }
@@ -73,5 +78,25 @@ public class Dessert {
 
     public void setDatesAvailable(String datesAvailable) {
         this.datesAvailable = datesAvailable;
+    }
+
+    public double getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(double lastUpdated) {
+        this.lastUpdated = lastUpdated;
+    }
+
+    public Map<String, Object> toMap() {
+        HashMap<String, Object> result = new HashMap<>();
+        result.put("id", getId());
+        result.put("name", getName());
+        result.put("desc", getDescription());
+        result.put("img_url", getImageUrl());
+        result.put("cost", getCost());
+        result.put("dates", getDatesAvailable());
+        result.put("lastUpdated", ServerValue.TIMESTAMP);
+        return result;
     }
 }

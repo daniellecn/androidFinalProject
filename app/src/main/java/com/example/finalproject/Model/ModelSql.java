@@ -12,10 +12,18 @@ import java.util.List;
 
 public class ModelSql {
     private SQLiteOpenHelper helper;
-    private int version = 2;
+    private int version = 7;
 
     public ModelSql() {
         helper = new Helper(AppContext.getAppContext());
+    }
+
+    public SQLiteDatabase getWritableDB(){
+        return helper.getWritableDatabase();
+    }
+
+    public SQLiteDatabase getReadbleDB(){
+        return helper.getReadableDatabase();
     }
 
     public void addDessert(Dessert dessert){
@@ -38,14 +46,16 @@ public class ModelSql {
         }
 
         @Override
-        public void onCreate(SQLiteDatabase sqLiteDatabase) {
-            DessertSql.create(sqLiteDatabase);
+        public void onCreate(SQLiteDatabase db) {
+            DessertSql.create(db);
+            LastUpdateSql.create(db);
         }
 
         @Override
-        public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-            DessertSql.dropTable(sqLiteDatabase);
-            onCreate(sqLiteDatabase);
+        public void onUpgrade(SQLiteDatabase db, int i, int i1) {
+            DessertSql.dropTable(db);
+            LastUpdateSql.drop(db);
+            onCreate(db);
         }
     }
 }

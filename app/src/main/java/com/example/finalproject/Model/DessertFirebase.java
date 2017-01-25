@@ -2,8 +2,8 @@ package com.example.finalproject.Model;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.PorterDuff;
 import android.net.Uri;
+import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -11,6 +11,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
@@ -25,11 +26,11 @@ import java.util.List;
  */
 
 public class DessertFirebase {
+    private static FirebaseDatabase database = FirebaseDatabase.getInstance();
 
     public static void addDessert(Dessert dessert, final Model.SuccessListener listener){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("desserts").child(String.valueOf(dessert.getId()));
-        myRef.setValue(dessert);
+        myRef.setValue(dessert.toMap());
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -85,26 +86,67 @@ public class DessertFirebase {
         });
     }
 
-    public static void getAllDesserts(final Model.GetAllDessertsListener listener){
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("desserts");
+//    public static void getAllDesserts(final Model.GetAllDessertsListener listener){
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference myRef = database.getReference("desserts");
+//
+//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                List<Dessert> desserts = new LinkedList<Dessert>();
+//                for (DataSnapshot stSnapshot : dataSnapshot.getChildren()) {
+//                    Dessert dessert = stSnapshot.getValue(Dessert.class);
+//                    desserts.add(dessert);
+//                }
+//                listener.onComplete(desserts);
+//            }
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//                listener.onComplete(null);
+//            }
+//        });
+//    }
 
+    public static void getDessertById(double id, final Model.GetDessertListener listener){
+        DatabaseReference myRef = database.getReference("desserts").child(String.valueOf(id));
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                List<Dessert> desserts = new LinkedList<Dessert>();
-                for (DataSnapshot stSnapshot : dataSnapshot.getChildren()) {
-                    Dessert dessert = stSnapshot.getValue(Dessert.class);
-                    desserts.add(dessert);
-                }
-                listener.onComplete(desserts);
+            public void onDataChange(DataSnapshot snapshot) {
+                Dessert dessert = snapshot.getValue(Dessert.class);
+                //Log.d("TAG", dessert.getName() + " - " + dessert.getId());
+                listener.onComplete(dessert);
             }
+
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                listener.onComplete(null);
+
             }
         });
+    }
 
+    public static void getDessertsFromDate(double lastUpdateDate, final Model.GetAllDessertsListener listener) {
+        // Get all the desserts from the last update
+        DatabaseReference myRef = database.getReference("desserts");
+        Query query = myRef.orderByChild("lastUpdated").startAt(lastUpdateDate);
+
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                final List<Dessert> dessertList = new LinkedList<Dessert>();
+
+                // Create the desserts list
+                for (DataSnapshot stSnapshot : dataSnapshot.getChildren()) {
+                    Dessert dessert = stSnapshot.getValue(Dessert.class);
+                    dessertList.add(dessert);
+                }
+                listener.onComplete(dessertList);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                listener.onCancel();
+            }
+        });
     }
 }
 

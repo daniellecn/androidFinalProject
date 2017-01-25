@@ -1,10 +1,15 @@
 package com.example.finalproject.Model;
 
+import android.database.sqlite.SQLiteDatabase;
+
 /**
  * Created by Danielle Cohen on 17/01/2017.
  */
 
 public class ModelFirebase {
+
+    public ModelFirebase() {
+    }
 
     public void userLogIn(User user, Model.LogInListener listener){
         UserFirebase.userLogIn(user, listener);
@@ -29,7 +34,12 @@ public class ModelFirebase {
         DessertFirebase.addDessert(dessert, listener);
     }
 
-    public void getAllDesserts(final Model.GetAllDessertsListener listener){
-        DessertFirebase.getAllDesserts(listener);
+    public void getDessertsFromDate(double lastUpdateDate, final Model.GetAllDessertsListener listener){
+        DessertFirebase.getDessertsFromDate(lastUpdateDate, listener);
     }
+
+    public void getDessertById(double id, final Model.GetDessertListener listener){
+        DessertFirebase.getDessertById(id, listener);
+    }
+
 }
