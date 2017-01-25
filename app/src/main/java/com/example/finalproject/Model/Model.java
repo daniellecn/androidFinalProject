@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.util.Log;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -52,7 +53,7 @@ public class Model {
     }
 
     public interface GetImageListener{
-        public void onSccess(Bitmap image);
+        public void onSuccess(Bitmap image);
         public void onFail();
     }
 
@@ -121,6 +122,37 @@ public class Model {
                 listener.onCancel();
             }
         });
+    }
 
+    public void loadImage(final String url, final GetImageListener listener) {
+        // First try to find the image on the device
+        String localFileName = ImageModel.getLocalImageFileName(url);
+        Bitmap image = ImageModel.loadImageFromFile(localFileName);
+
+        //If image not found - try downloading it from firebase
+        if (image == null) {
+            //Log.d("TAG","fail reading cache image: " + localFileName);
+
+            ImageModel.getImage(url, new GetImageListener() {
+                @Override
+                public void onSuccess(Bitmap image) {
+                    // Save the image localy
+                    String localFileName = ImageModel.getLocalImageFileName(url);
+                    Log.d("TAG","save image to cache: " + localFileName);
+                    ImageModel.saveImageToFile(image,localFileName);
+
+                    // Return the image using the listener
+                    listener.onSuccess(image);
+                }
+
+                @Override
+                public void onFail() {
+                    listener.onFail();
+                }
+            });
+        }else {
+            Log.d("TAG","OK reading cache image: " + localFileName);
+            listener.onSuccess(image);
+        }
     }
 }

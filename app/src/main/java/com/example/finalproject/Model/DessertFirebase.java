@@ -76,7 +76,7 @@ public class DessertFirebase {
             @Override
             public void onSuccess(byte[] bytes) {
                 Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
-                listener.onSccess(image);
+                listener.onSuccess(image);
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
