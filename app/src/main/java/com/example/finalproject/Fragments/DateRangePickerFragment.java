@@ -52,6 +52,7 @@ public class DateRangePickerFragment extends DialogFragment implements View.OnCl
 
         View root = inflater.inflate(R.layout.date_range_picker, container, false);
         getDialog().getWindow().requestFeature(Window.FEATURE_NO_TITLE);
+
         tabHost = (TabHost) root.findViewById(R.id.tabHost);
         butSetDateRange = (Button) root.findViewById(R.id.but_set_time_range);
         startDatePicker = (DatePicker) root.findViewById(R.id.start_date_picker);
@@ -59,6 +60,7 @@ public class DateRangePickerFragment extends DialogFragment implements View.OnCl
         butSetDateRange.setOnClickListener(this);
         tabHost.findViewById(R.id.tabHost);
         tabHost.setup();
+
         TabHost.TabSpec startDatePage = tabHost.newTabSpec("start");
         startDatePage.setContent(R.id.start_date_group);
         startDatePage.setIndicator(getString(R.string.title_tab_start_date));

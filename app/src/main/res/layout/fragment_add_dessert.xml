@@ -43,7 +43,7 @@
             android:weightSum="4"
             android:padding="8dp">
             <TextView
-                android:text="Lable:"
+                android:text="@string/lable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -51,7 +51,6 @@
                 android:textSize="18dp" />
 
             <EditText
-                android:text="Macrons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textSize="18dp"
@@ -66,7 +65,7 @@
             android:padding="8dp">
 
             <TextView
-                android:text="Description:"
+                android:text="@string/description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textStyle="bold"
@@ -74,7 +73,6 @@
                 android:textSize="18dp"/>
 
             <EditText
-                android:text="@string/longText"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:id="@+id/addDesc"

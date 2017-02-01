@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,7 +25,7 @@ import com.example.finalproject.R;
  * A simple {@link Fragment} subclass.
  */
 public class LoginFragment extends Fragment {
-
+    //ProgressBar progressBar;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -39,6 +40,8 @@ public class LoginFragment extends Fragment {
 
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_login, container, false);
+        //progressBar = (ProgressBar) view.findViewById(R.id.loginProgressBar);
+        //progressBar.setVisibility(view.GONE);
 
         TextView signupText = (TextView) view.findViewById(R.id.loginSignup);
         signupText.setOnClickListener(new View.OnClickListener() {
@@ -57,8 +60,10 @@ public class LoginFragment extends Fragment {
             public void onClick(View v) {
                 EditText name = (EditText) view.findViewById(R.id.loginName);
                 EditText pass = (EditText) view.findViewById(R.id.loginPassword);
+
                 User user = new User (name.getText().toString(), pass.getText().toString());
 
+                //progressBar.setVisibility(view.VISIBLE);
                 Model.instance().logIn(user, new Model.LogInListener() {
                     @Override
                     public void onComplete(boolean isLogIn) {
@@ -74,6 +79,7 @@ public class LoginFragment extends Fragment {
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
                         }
+                        //progressBar.setVisibility(view.GONE);
                     }
                 });
             }

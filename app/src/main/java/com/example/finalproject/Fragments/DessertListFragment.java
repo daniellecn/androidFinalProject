@@ -1,6 +1,7 @@
 package com.example.finalproject.Fragments;
 
 
+import android.Manifest;
 import android.app.ListFragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -33,7 +34,7 @@ public class DessertListFragment extends ListFragment {
     private static final int REQUEST_WRITE_STORAGE = 112;
 
     List<Dessert> dissertListData;
-    ProgressBar progressBar;
+    //ProgressBar progressBar;
     StudentsAdapter adapter;
 
     public DessertListFragment() {
@@ -49,21 +50,38 @@ public class DessertListFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_dessert_list, container, false);
 
         /** Check permissions ***/
+//       boolean hasPermission = (ContextCompat.checkSelfPermission(AppContext.getAppContext(),
+//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+//
+//        if (!hasPermission) {
+//            ActivityCompat.requestPermissions(getActivity(),
+//                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+//                    REQUEST_WRITE_STORAGE);
+//        }
         boolean hasPermission = (ContextCompat.checkSelfPermission(AppContext.getAppContext(),
-                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
+                android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
 
         if (!hasPermission) {
             ActivityCompat.requestPermissions(getActivity(),
-                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                    new String[]{
+                            Manifest.permission.CAMERA,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE,
+                            Manifest.permission.INTERNET,
+                            Manifest.permission.ACCESS_NETWORK_STATE,
+                            Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_WRITE_STORAGE);
         }
+
+
         /** END Check permissions ***/
 
         // Get elements from screen
-        progressBar = (ProgressBar) view.findViewById(R.id.listProgressBar);
+        //progressBar = (ProgressBar) view.findViewById(R.id.listProgressBar);
 
         adapter = new StudentsAdapter();
         setListAdapter(adapter);
+
+        loadDessertsListData();
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }
@@ -86,13 +104,13 @@ public class DessertListFragment extends ListFragment {
 
     private void loadDessertsListData(){
         // Display progress bar
-        progressBar.setVisibility(View.VISIBLE);
+        //progressBar.setVisibility(View.VISIBLE);
 
-        Model.instance().getAllDessertAsynch(new Model.GetAllDessertsListener() {
+        Model.instance().getAllDessertAsynch(new Model.GetAllDessertsAsynchListener() {
             @Override
             public void onComplete(List<Dessert> dessertList) {
                 // Cancel progress bar
-                progressBar.setVisibility(View.GONE);
+                //progressBar.setVisibility(View.GONE);
 
                 // Update list data
                 dissertListData = dessertList;
@@ -137,23 +155,6 @@ public class DessertListFragment extends ListFragment {
 
             // If there is a image to display
             if (dessert.getImageUrl() != null && dessert.getImageUrl() != ""){
-                progressBar.setVisibility(view.VISIBLE);
-
-                Model.instance().loadImage(dessert.getImageUrl(), new Model.GetImageListener() {
-                    @Override
-                    public void onSuccess(Bitmap image) {
-                        if (image != null ){
-                            // Set the image element
-                            dessertImage.setImageBitmap(image);
-                            progressBar.setVisibility(View.GONE);
-                        }
-                    }
-
-                    @Override
-                    public void onFail() {
-                        progressBar.setVisibility(View.GONE);
-                    }
-                });
             }
 
             return view;

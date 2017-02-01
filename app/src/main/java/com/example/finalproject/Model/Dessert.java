@@ -32,6 +32,15 @@ public class Dessert {
         this.datesAvailable = datesAvailable;
     }
 
+    public Dessert(Dessert dessert){
+        this.id = dessert.getId();
+        this.name = dessert.getName();
+        this.description = dessert.getDescription();
+        this.imageUrl = dessert.getImageUrl();
+        this.cost = dessert.getCost();
+        this.datesAvailable = dessert.getDatesAvailable();
+    }
+
     public int getId() {
         return id;
     }

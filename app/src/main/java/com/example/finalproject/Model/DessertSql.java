@@ -72,7 +72,8 @@ public class DessertSql {
 
         if (cursor.moveToFirst() == true){
             // Create the dessert object
-            dessert = new Dessert(cursor.getInt(cursor.getColumnIndex(ID)),
+            dessert = new Dessert(
+                    cursor.getInt(cursor.getColumnIndex(ID)),
                     cursor.getString(cursor.getColumnIndex(NAME)),
                     cursor.getString(cursor.getColumnIndex(DESC)),
                     cursor.getString(cursor.getColumnIndex(IMAGE_URL)),
@@ -108,7 +109,8 @@ public class DessertSql {
 
             // Move on the selected data and create list of desserts
             do {
-                dessert = new Dessert(cursor.getInt(idIndex),
+                dessert = new Dessert(
+                        cursor.getInt(idIndex),
                         cursor.getString(nameIndex),
                         cursor.getString(descIndex),
                         cursor.getString(imageIndex),

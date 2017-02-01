@@ -3,7 +3,6 @@ package com.example.finalproject.Model;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.util.Log;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -125,6 +124,8 @@ public class DessertFirebase {
     }
 
     public static void getDessertsFromDate(double lastUpdateDate, final Model.GetAllDessertsListener listener) {
+        final int[] maxKey = {-1};
+
         // Get all the desserts from the last update
         DatabaseReference myRef = database.getReference("desserts");
         Query query = myRef.orderByChild("lastUpdated").startAt(lastUpdateDate);
@@ -137,9 +138,14 @@ public class DessertFirebase {
                 // Create the desserts list
                 for (DataSnapshot stSnapshot : dataSnapshot.getChildren()) {
                     Dessert dessert = stSnapshot.getValue(Dessert.class);
+
+                    if (maxKey[0] < dessert.getId()){
+                        maxKey[0]++;
+                    }
+
                     dessertList.add(dessert);
                 }
-                listener.onComplete(dessertList);
+                listener.onComplete(dessertList, maxKey[0]);
             }
 
             @Override

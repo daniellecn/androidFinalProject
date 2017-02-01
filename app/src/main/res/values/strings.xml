@@ -1,22 +1,23 @@
 <resources>
     <string name="app_name"></string>
 
+    <!-- Buttons text -->
+    <string name="login">LOGIN</string>
+    <string name="createAccount">CREATE ACCOUNT</string>
+    <string name="save">SAVE</string>
+    <string name="edit">EDIT</string>
 
+    <!-- Screen elements -->
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="login">LOGIN</string>
     <string name="noAccount">No account yet? Create one</string>
-    <string name="createAccount">CREATE ACCOUNT</string>
     <string name="name">Name</string>
-    <string name="title_activity_signup"></string>
+    <string name="lable">Lable:</string>
+    <string name="description">Description:</string>
     <string name="cost">Cost:</string>
     <string name="dates">Dates:</string>
-    <string name="longText">long text long text long text long text long text
-    long text long text long text long text long text long text long text </string>
     <string name="search_hint">Search</string>
     <string name="but_done">Done</string>
-    <string name="title_tab_start_date">Start date</string>
-    <string name="title_tab_end_date">End date</string>
     <string name="enter_dates">Click to select dates</string>
 
     <!-- TODO: Remove or change this placeholder text -->
@@ -25,6 +26,9 @@
     <string name="title_activity_list_dish"></string>
     <string name="title_activity_searchable">searchableActivity</string>
     <string name="title_activity_add_dessert">AddDessertActivity</string>
+    <string name="title_activity_signup"></string>
+    <string name="title_tab_start_date">Start date</string>
+    <string name="title_tab_end_date">End date</string>
 
     
     <!--Messages-->
@@ -32,4 +36,15 @@
     <string name="loginError">Username or Password incorrect</string>
     <string name="addedSuccessfuly">Dessert added successfully! </string>
     <string name="errorAdding">Error adding, try again</string>
+    <string name="errorImage">Error processing image</string>
+
+    <!-- Dialogs -->
+    <string name="uploadOptionsTitle">"Upload Pictures Option</string>
+    <string name="uploadOptionsQuestion">How do you want to set your picture?</string>
+    <string name="uploadGalleryOption">Gallery</string>
+    <string name="uploadCameraOption">Camera</string>
+
+    <!-- Suffix -->
+    <string name="jpg">.jpg</string>
+    <string name="provider">.provider</string>
 </resources>

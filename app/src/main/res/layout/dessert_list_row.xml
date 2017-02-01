@@ -33,7 +33,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
                 <TextView
-                    android:text="Lable"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@color/cardColor"
@@ -41,7 +40,6 @@
                     android:id="@+id/dishRowLable" />
 
                 <TextView
-                    android:text="@string/longText"
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/cardColor"

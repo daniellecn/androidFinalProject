@@ -22,6 +22,8 @@ public class Model {
     private ModelFirebase remote;
     private ModelSql local;
 
+    private static int currentKey;
+
     public static Model instance(){
         return instance;
     }
@@ -58,6 +60,11 @@ public class Model {
     }
 
     public interface GetAllDessertsListener{
+        void onComplete(List<Dessert> dessertList, int currentMaxKey);
+        public void onCancel();
+    }
+
+    public interface GetAllDessertsAsynchListener{
         void onComplete(List<Dessert> dessertList);
         public void onCancel();
     }
@@ -66,6 +73,15 @@ public class Model {
         void onComplete(Dessert dessert);
         public void onCancel();
     }
+
+    public static void setCurrentKey(int currentKey) {
+        Model.currentKey = currentKey;
+    }
+
+    public static int getCurrentKey() {
+        return currentKey;
+    }
+
 
     public List<Dessert> getDessertData() {
         return dessertData;
@@ -79,22 +95,40 @@ public class Model {
         remote.userSignUp(user, listener);
     }
 
-    public void addDessert(Dessert dessert, final SuccessListener listener){
-        remote.addDessert(dessert, listener);
+    public void addDessert(final Dessert dessert, Bitmap dessertImageBitmap, final SuccessListener listener){
+        // Save the image on the SD-CARD
+        ImageLocal.saveLocalImage(dessertImageBitmap, String.valueOf(dessert.getId()));
+
+        // Upload image to firebase storage
+        ImageFirebase.saveImage(dessertImageBitmap, String.valueOf(dessert.getId()), new SaveImageListener() {
+            @Override
+            public void fail() {
+                listener.onResult(false);
+            }
+
+            @Override
+            public void complete(String url) {
+                dessert.setImageUrl(url);
+
+                // Save the dessert to firebase database
+                remote.addDessert(dessert, listener);
+
+                listener.onResult(true);
+            }
+        });
+
+         // Update the key
+        setCurrentKey(getCurrentKey() + 1);
     }
 
-    public static int getNextDessertId() {
-        return 0;
-    }
-
-    public void getAllDessertAsynch(final GetAllDessertsListener listener){
+    public void getAllDessertAsynch(final GetAllDessertsAsynchListener listener){
         // Get last update date
         final double lastUpdateDate = DessertSql.getLastUpdateDate(local.getReadbleDB());
 
         // Get all desserts records that where updated since last update date
         remote.getDessertsFromDate(lastUpdateDate, new GetAllDessertsListener() {
             @Override
-            public void onComplete(List<Dessert> dessertList) {
+            public void onComplete(List<Dessert> dessertList, int currentMaxKey) {
                 // If there are new desserts in firebase
                 if (dessertList != null && dessertList.size() > 0){
 
@@ -110,6 +144,11 @@ public class Model {
 
                     // Update the last update date
                     DessertSql.setLastUpdateDate(local.getWritableDB(), recentUpdate);
+
+                    // Update the current key
+                    if (getCurrentKey() < currentMaxKey){
+                        setCurrentKey(currentMaxKey + 1);
+                    }
                 }
 
                 // Return all Desserts from the updated local db
@@ -122,37 +161,5 @@ public class Model {
                 listener.onCancel();
             }
         });
-    }
-
-    public void loadImage(final String url, final GetImageListener listener) {
-        // First try to find the image on the device
-        String localFileName = ImageModel.getLocalImageFileName(url);
-        Bitmap image = ImageModel.loadImageFromFile(localFileName);
-
-        //If image not found - try downloading it from firebase
-        if (image == null) {
-            //Log.d("TAG","fail reading cache image: " + localFileName);
-
-            ImageModel.getImage(url, new GetImageListener() {
-                @Override
-                public void onSuccess(Bitmap image) {
-                    // Save the image localy
-                    String localFileName = ImageModel.getLocalImageFileName(url);
-                    Log.d("TAG","save image to cache: " + localFileName);
-                    ImageModel.saveImageToFile(image,localFileName);
-
-                    // Return the image using the listener
-                    listener.onSuccess(image);
-                }
-
-                @Override
-                public void onFail() {
-                    listener.onFail();
-                }
-            });
-        }else {
-            Log.d("TAG","OK reading cache image: " + localFileName);
-            listener.onSuccess(image);
-        }
     }
 }

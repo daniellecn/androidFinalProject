@@ -1,14 +1,6 @@
 package com.example.finalproject.Model;
 
-import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.util.Log;
-
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 /**
  * Created by Danielle Cohen on 17/01/2017.
@@ -39,6 +31,7 @@ public class ModelFirebase {
     }
 
     public void addDessert(Dessert dessert, Model.SuccessListener listener) {
+        // Add the dessert to firebase databace
         DessertFirebase.addDessert(dessert, listener);
     }
 

@@ -1,11 +1,11 @@
 package com.example.finalproject.Fragments;
 
-
+import android.Manifest;
 import android.app.AlertDialog;
 import android.app.Fragment;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -15,6 +15,9 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -27,14 +30,16 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.finalproject.Activities.DessertActivity;
 import com.example.finalproject.Activities.DessertListActivity;
+import com.example.finalproject.Model.AppContext;
 import com.example.finalproject.Model.Dessert;
 import com.example.finalproject.Model.Model;
 import com.example.finalproject.R;
 
 
 import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 
 
 import static android.app.Activity.RESULT_OK;
@@ -45,13 +50,11 @@ import static android.app.Activity.RESULT_OK;
 public class AddDessertFragment extends Fragment implements DateRangePickerFragment.OnDateRangeSelectedListener {
     protected static final int CAMERA_REQUEST = 0;
     protected static final int GALLERY_PICTURE = 1;
-    private Intent pictureActionIntent = null;
-    Bitmap bitmap;
-    ImageButton addImage;
+    protected static final int PICK_CAMERA_IMAGE = 0;
 
-    String selectedImagePath;
-
-    Dessert newDessert;
+    private Dessert newDessert;
+    private String selectedImagePath;
+    private Bitmap selectedImageBitmap;
 
     public AddDessertFragment() {
         // Required empty public constructor
@@ -69,13 +72,12 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
         setHasOptionsMenu(true);
 
         // Camera button
-        addImage = (ImageButton) view.findViewById(R.id.addNew);
+        ImageButton addImage = (ImageButton) view.findViewById(R.id.addNew);
         addImage.setFocusableInTouchMode(true);
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 startDialog();
-                //startActivity(new Intent(Intent.ACTION_VIEW));
             }
         });
 
@@ -89,15 +91,16 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
             }
         });
 
+        newDessert = new Dessert();
+        newDessert.setId(Model.getCurrentKey());
+
         return view;
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        MenuInflater inflater = getActivity().getMenuInflater();
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.add_menu, menu);
-        return true;
+        super.onCreateOptionsMenu(menu,inflater);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -105,19 +108,14 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
         switch (item.getItemId()) {
             case R.id.menuSave:
             {
-                // Create the dessert object
-                ImageView dessertImage = (ImageView) getView().findViewById(R.id.addImg);
-                EditText dessertName = (EditText) getView().findViewById(R.id.addLable);
-                EditText dessertDesc = (EditText) getView().findViewById(R.id.addDesc);
-                EditText dessertCost = (EditText) getView().findViewById(R.id.addCost);
-                TextView dessertDates = (TextView) getView().findViewById(R.id.addDates);
-
-                newDessert = new Dessert(Model.getNextDessertId(),dessertName.getText().toString(),
-                        dessertDesc.getText().toString(), " ", dessertCost.getText().toString(),
-                        dessertDates.getText().toString());
+                // Update the dessert object
+                newDessert.setName(((EditText) getView().findViewById(R.id.addLable)).getText().toString());
+                newDessert.setDescription(((EditText) getView().findViewById(R.id.addDesc)).getText().toString());
+                newDessert.setCost(((EditText) getView().findViewById(R.id.addCost)).getText().toString());
+                newDessert.setDatesAvailable(((TextView) getView().findViewById(R.id.addDates)).getText().toString());
 
                 // Add the dessert
-                Model.instance().addDessert(newDessert, new Model.SuccessListener() {
+                Model.instance().addDessert(newDessert, selectedImageBitmap ,new Model.SuccessListener() {
                     @Override
                     public void onResult(boolean result) {
                         if (result){
@@ -144,6 +142,11 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        return false;
+    }
+
+    @Override
     public void onDateRangeSelected(int startDay, int startMonth, int startYear, int endDay, int endMonth, int endYear) {
         TextView dates = (TextView) getView().findViewById(R.id.addDates);
         dates.setText(startDay+"/"+startMonth+"/"+startYear+" - " + endDay + "/" + endMonth + "/" + endYear);
@@ -151,12 +154,13 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
     }
 
     private void startDialog() {
-        AlertDialog.Builder myAlertDialog = new AlertDialog.Builder(
+        AlertDialog.Builder optionsAlert = new AlertDialog.Builder(
                 getActivity());
-        myAlertDialog.setTitle("Upload Pictures Option");
-        myAlertDialog.setMessage("How do you want to set your picture?");
+        optionsAlert.setTitle(getString(R.string.uploadOptionsTitle));
+        optionsAlert.setMessage(getString(R.string.uploadOptionsQuestion));
 
-        myAlertDialog.setPositiveButton("Gallery",
+        /** Gallery option**/
+        optionsAlert.setPositiveButton(getString(R.string.uploadGalleryOption),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
                         Intent pictureActionIntent = new Intent(
@@ -166,117 +170,123 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                     }
                 });
 
-        myAlertDialog.setNegativeButton("Camera",
+        /** Camera option **/
+        AlertDialog.Builder camera = optionsAlert.setNegativeButton(getString(R.string.uploadCameraOption),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface arg0, int arg1) {
+                        /** Check permissions ***/
+                        boolean hasPermission = (ContextCompat.checkSelfPermission(AppContext.getAppContext(),
+                                Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED);
 
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File f = new File(Environment.getExternalStorageDirectory(), "temp.jpg");
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
+                        if (!hasPermission) {
+                            ActivityCompat.requestPermissions(getActivity(),
+                                    new String[]{Manifest.permission.CAMERA},
+                                    CAMERA_REQUEST);
+                        }
+                        else {
 
-                        startActivityForResult(intent, CAMERA_REQUEST);
+                            String name = String.valueOf(newDessert.getId() + 1);
+                            File destination = new File(Environment
+                                    .getExternalStorageDirectory(), name + getString(R.string.jpg));
 
+                            Uri photoURI = FileProvider.getUriForFile(AppContext.getAppContext(),
+                                    AppContext.getAppContext().getApplicationContext().getPackageName() + getString(R.string.provider),
+                                    destination);
+
+                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            startActivityForResult(intent, PICK_CAMERA_IMAGE);
+
+                        }
                     }
                 });
-        myAlertDialog.show();
+        optionsAlert.show();
     }
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
 
-        super.onActivityResult(requestCode, resultCode, data);
+        super.onActivityResult(requestCode, resultCode, intent);
 
-        bitmap = null;
         selectedImagePath = null;
 
-        if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
+        if (resultCode == RESULT_OK && requestCode == GALLERY_PICTURE) {
+            if (intent != null) {
+                /** Get the selected image path **/
+                Uri selectedImage = intent.getData();
+                String[] filePath = {MediaStore.Images.Media.DATA};
+                Cursor cursor = getActivity().getContentResolver().query(selectedImage, filePath, null, null, null);
 
-            File f = new File(Environment.getExternalStorageDirectory()
-                    .toString());
-            for (File temp : f.listFiles()) {
-                if (temp.getName().equals("temp.jpg")) {
-                    f = temp;
-                    break;
-                }
+                cursor.moveToFirst();
+                int columnIndex = cursor.getColumnIndex(filePath[0]);
+                selectedImagePath = cursor.getString(columnIndex);
+                cursor.close();
             }
+        }
+        else if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST){
+            /** Get the new image path **/
+            File file = new File (Environment.getExternalStorageDirectory().toString());
 
-            if (!f.exists()) {
+             for (File temp : file.listFiles()){
+                 if (temp.getName().equals(String.valueOf(newDessert.getId() + ".jpg"))){
+                     file = temp;
+                     break;
+                 }
+             }
 
+            // If the new image was not found
+            if (!file.exists()){
                 Toast.makeText(getActivity().getApplicationContext(),
-                        "Error while capturing image", Toast.LENGTH_LONG)
-                        .show();
+                        R.string.errorImage, Toast.LENGTH_LONG).show();
                 return;
-
             }
-
-            try {
-                bitmap = BitmapFactory.decodeFile(f.getAbsolutePath());
-                bitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, true);
-
-                int rotate = 0;
-                try {
-                    ExifInterface exif = new ExifInterface(f.getAbsolutePath());
-                    int orientation = exif.getAttributeInt(
-                            ExifInterface.TAG_ORIENTATION,
-                            ExifInterface.ORIENTATION_NORMAL);
-
-                    switch (orientation) {
-                        case ExifInterface.ORIENTATION_ROTATE_270:
-                            rotate = 270;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_180:
-                            rotate = 180;
-                            break;
-                        case ExifInterface.ORIENTATION_ROTATE_90:
-                            rotate = 90;
-                            break;
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                Matrix matrix = new Matrix();
-                matrix.postRotate(rotate);
-                bitmap = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth(),
-                        bitmap.getHeight(), matrix, true);
-
-
-                addImage.setImageBitmap(bitmap);
-                //storeImageTosdCard(bitmap);
-            } catch (Exception e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-
-        } else if (resultCode == RESULT_OK && requestCode == GALLERY_PICTURE) {
-            if (data != null) {
-
-                Uri selectedImage = data.getData();
-                String[] filePath = { MediaStore.Images.Media.DATA };
-                Cursor c = getActivity().getContentResolver().query(selectedImage, filePath,
-                        null, null, null);
-                c.moveToFirst();
-                int columnIndex = c.getColumnIndex(filePath[0]);
-                selectedImagePath = c.getString(columnIndex);
-                c.close();
-
-                if (selectedImagePath != null) {
-                    //txt_image_path.setText(selectedImagePath); TODO
-                }
-                ImageView dessertImage = (ImageView) getView().findViewById(R.id.addImg);
-                dessertImage.setImageURI(selectedImage);
-                //newDessert.setImageUrl(selectedImaged);
-                //bitmap = BitmapFactory.decodeFile(selectedImagePath); // load
-                // preview image
-                //bitmap = Bitmap.createScaledBitmap(bitmap, 400, 400, false);
-
-                //addImage.setImageBitmap(bitmap);
-
-            } else {
-                Toast.makeText(getActivity().getApplicationContext(), "Cancelled",
-                        Toast.LENGTH_SHORT).show();
+            else{
+                selectedImagePath = file.getAbsolutePath();
             }
         }
 
+        // Creating the bitmap and make the changes
+        if (selectedImagePath != null){
+            /** Get selected image as bitmap **/
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+            selectedImageBitmap = BitmapFactory.decodeFile(selectedImagePath);
+
+            /** Rotating image **/
+            int rotate = 0;
+            try {
+                ExifInterface exifInterface = new ExifInterface(selectedImagePath);
+                int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
+
+                switch (orientation){
+                    case ExifInterface.ORIENTATION_ROTATE_270:
+                        rotate = 270;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_180:
+                        rotate = 180;
+                        break;
+                    case ExifInterface.ORIENTATION_ROTATE_90:
+                        rotate = 90;
+                        break;
+                }
+
+
+                Matrix matrix = new Matrix();
+                matrix.postRotate(rotate);
+                selectedImageBitmap = Bitmap.createBitmap(selectedImageBitmap, 0, 0, selectedImageBitmap.getWidth(),
+                        selectedImageBitmap.getHeight(), matrix, true);
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(getActivity().getApplicationContext(),
+                        R.string.errorImage, Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            /** Update the screen **/
+            ImageView dessertImage = (ImageView) getView().findViewById(R.id.addImg);
+            dessertImage.setImageBitmap(selectedImageBitmap);
+        }
     }
 
 

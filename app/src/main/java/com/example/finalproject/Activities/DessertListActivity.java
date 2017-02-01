@@ -33,7 +33,7 @@ public class DessertListActivity extends Activity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.search_menu, menu);
 
-        SearchManager searchManager = (SearchManager)
+        /*SearchManager searchManager = (SearchManager)
                 getSystemService(Context.SEARCH_SERVICE);
         MenuItem searchMenuItem = menu.findItem(R.id.search);
         SearchView searchView = (SearchView) searchMenuItem.getActionView();
@@ -51,7 +51,7 @@ public class DessertListActivity extends Activity {
             public boolean onQueryTextChange(String newText) {
                 return false;
             }
-        });
+        });*/
 
         ImageButton addButoon = (ImageButton) findViewById(R.id.add_new);
         addButoon.setOnClickListener(new View.OnClickListener() {
