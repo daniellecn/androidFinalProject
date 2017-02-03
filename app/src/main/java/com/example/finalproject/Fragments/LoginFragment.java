@@ -68,7 +68,6 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onComplete(boolean isLogIn) {
                         if (isLogIn){
-                            Model.instance().setConnectedUser(user);
                             Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
                             startActivity(intent);
                         }
@@ -87,7 +86,7 @@ public class LoginFragment extends Fragment {
         });
         ((EditText) view.findViewById(R.id.loginName)).setText("1");
         ((EditText) view.findViewById(R.id.loginPassword)).setText("1");
-        loginButton.callOnClick();
+        //loginButton.callOnClick();
 
         return view;
     }

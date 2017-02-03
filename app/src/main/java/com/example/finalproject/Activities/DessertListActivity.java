@@ -29,7 +29,7 @@ public class DessertListActivity extends Activity {
         getActionBar().setIcon(R.color.colorPrimaryDark);
 
         // check if need to display the add button
-        if (!Model.instance().getConnectedUser().isAdmin()){
+        if (Model.instance().getConnectedUser().isAdmin()){
             ((ImageView) findViewById(R.id.add_new)).setVisibility(View.VISIBLE);
         }
 
