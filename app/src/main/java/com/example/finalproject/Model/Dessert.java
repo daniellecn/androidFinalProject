@@ -101,10 +101,10 @@ public class Dessert {
         HashMap<String, Object> result = new HashMap<>();
         result.put("id", getId());
         result.put("name", getName());
-        result.put("desc", getDescription());
-        result.put("img_url", getImageUrl());
+        result.put("description", getDescription());
+        result.put("imageUrl", getImageUrl());
         result.put("cost", getCost());
-        result.put("dates", getDatesAvailable());
+        result.put("datesAvailable", getDatesAvailable());
         result.put("lastUpdated", ServerValue.TIMESTAMP);
         return result;
     }

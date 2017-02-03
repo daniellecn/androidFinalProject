@@ -52,6 +52,10 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
     protected static final int GALLERY_PICTURE = 1;
     protected static final int PICK_CAMERA_IMAGE = 0;
 
+    protected static final int ADD_MODE = 0;
+    protected static final int EDIT_MODE = 1;
+
+    private int mode;
     private Dessert newDessert;
     private String selectedImagePath;
     private Bitmap selectedImageBitmap;
@@ -60,12 +64,19 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
         // Required empty public constructor
     }
 
+    public Dessert getNewDessert() {
+        return newDessert;
+    }
+
+    public void setNewDessert(Dessert newDessert) {
+        this.newDessert = newDessert;
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_add_dessert, container, false);
+        final View view = inflater.inflate(R.layout.fragment_add_dessert, container, false);
 
         // Action bar
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
@@ -91,45 +102,77 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
             }
         });
 
-        newDessert = new Dessert();
-        newDessert.setId(Model.getCurrentKey());
+        // Edit mode
+        if (getNewDessert() != null) {
+            // Update the screen
+            ((EditText) view.findViewById(R.id.addLable)).setText(getNewDessert().getName());
+            ((EditText) view.findViewById(R.id.addDesc)).setText(getNewDessert().getDescription());
+            ((EditText) view.findViewById(R.id.addCost)).setText((getNewDessert().getCost()));
+            ((TextView) view.findViewById(R.id.addDates)).setText(getNewDessert().getDatesAvailable());
+
+            Model.instance().getDessertImage(getNewDessert(), 8, new Model.GetImageListener() {
+                @Override
+                public void onSuccess(Bitmap image) {
+                    ((ImageView) view.findViewById(R.id.addImg)).setImageBitmap(Bitmap.createScaledBitmap(image, image.getWidth(),180, false));
+                }
+
+                @Override
+                public void onFail() {
+                    // TODO: default image
+                }
+            });
+
+            mode = EDIT_MODE;
+        }
+        // Add mode
+        else {
+            newDessert = new Dessert();
+            newDessert.setId(Model.getCurrentKey());
+
+            mode = ADD_MODE;
+        }
 
         return view;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
         inflater.inflate(R.menu.add_menu, menu);
-        super.onCreateOptionsMenu(menu,inflater);
+
+        // If add mode - remove delete button
+        if (mode == ADD_MODE){
+            menu.removeItem(R.id.menuDel);
+        }
+
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.menuSave:
-            {
+            case R.id.menuSave: {
                 // Update the dessert object
-                newDessert.setName(((EditText) getView().findViewById(R.id.addLable)).getText().toString());
-                newDessert.setDescription(((EditText) getView().findViewById(R.id.addDesc)).getText().toString());
-                newDessert.setCost(((EditText) getView().findViewById(R.id.addCost)).getText().toString());
-                newDessert.setDatesAvailable(((TextView) getView().findViewById(R.id.addDates)).getText().toString());
+                getNewDessert().setName(((EditText) getView().findViewById(R.id.addLable)).getText().toString());
+                getNewDessert().setDescription(((EditText) getView().findViewById(R.id.addDesc)).getText().toString());
+                getNewDessert().setCost(((EditText) getView().findViewById(R.id.addCost)).getText().toString());
+                getNewDessert().setDatesAvailable(((TextView) getView().findViewById(R.id.addDates)).getText().toString());
 
                 // Add the dessert
-                Model.instance().addDessert(newDessert, selectedImageBitmap ,new Model.SuccessListener() {
+                Model.instance().addDessert(getNewDessert(), selectedImageBitmap, new Model.SuccessListener() {
                     @Override
                     public void onResult(boolean result) {
-                        if (result){
+                        if (result) {
                             // Display message
-                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.addedSuccessfuly),
+                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.updateSuccessfuly),
                                     Toast.LENGTH_SHORT).show();
 
                             // Return to the list activity
                             Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
                             startActivity(intent);
-                        }
-                        else{
+                        } else {
                             // Display message
-                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errorAdding),
+                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errorOccure),
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -149,7 +192,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
     @Override
     public void onDateRangeSelected(int startDay, int startMonth, int startYear, int endDay, int endMonth, int endYear) {
         TextView dates = (TextView) getView().findViewById(R.id.addDates);
-        dates.setText(startDay+"/"+startMonth+"/"+startYear+" - " + endDay + "/" + endMonth + "/" + endYear);
+        dates.setText(startDay + "/" + startMonth + "/" + startYear + " - " + endDay + "/" + endMonth + "/" + endYear);
         dates.setTextColor(getResources().getColor(R.color.blackText));
     }
 
@@ -182,10 +225,9 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                             ActivityCompat.requestPermissions(getActivity(),
                                     new String[]{Manifest.permission.CAMERA},
                                     CAMERA_REQUEST);
-                        }
-                        else {
+                        } else {
 
-                            String name = String.valueOf(newDessert.getId() + 1);
+                            String name = String.valueOf(getNewDessert().getId() + 1);
                             File destination = new File(Environment
                                     .getExternalStorageDirectory(), name + getString(R.string.jpg));
 
@@ -222,31 +264,29 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                 selectedImagePath = cursor.getString(columnIndex);
                 cursor.close();
             }
-        }
-        else if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST){
+        } else if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
             /** Get the new image path **/
-            File file = new File (Environment.getExternalStorageDirectory().toString());
+            File file = new File(Environment.getExternalStorageDirectory().toString());
 
-             for (File temp : file.listFiles()){
-                 if (temp.getName().equals(String.valueOf(newDessert.getId() + ".jpg"))){
-                     file = temp;
-                     break;
-                 }
-             }
+            for (File temp : file.listFiles()) {
+                if (temp.getName().equals(String.valueOf(getNewDessert().getId() + ".jpg"))) {
+                    file = temp;
+                    break;
+                }
+            }
 
             // If the new image was not found
-            if (!file.exists()){
+            if (!file.exists()) {
                 Toast.makeText(getActivity().getApplicationContext(),
                         R.string.errorImage, Toast.LENGTH_LONG).show();
                 return;
-            }
-            else{
+            } else {
                 selectedImagePath = file.getAbsolutePath();
             }
         }
 
         // Creating the bitmap and make the changes
-        if (selectedImagePath != null){
+        if (selectedImagePath != null) {
             /** Get selected image as bitmap **/
             BitmapFactory.Options options = new BitmapFactory.Options();
             options.inPreferredConfig = Bitmap.Config.ARGB_8888;
@@ -258,7 +298,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                 ExifInterface exifInterface = new ExifInterface(selectedImagePath);
                 int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
-                switch (orientation){
+                switch (orientation) {
                     case ExifInterface.ORIENTATION_ROTATE_270:
                         rotate = 270;
                         break;

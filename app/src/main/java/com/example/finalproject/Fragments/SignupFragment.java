@@ -43,12 +43,13 @@ public class SignupFragment extends Fragment {
             public void onClick(View v) {
                 EditText userName = (EditText) view.findViewById(R.id.signName);
                 EditText userPass = (EditText) view.findViewById(R.id.signPassword);
-                User user = new User(userName.getText().toString(), userPass.getText().toString());
+                final User user = new User(userName.getText().toString(), userPass.getText().toString());
 
                 Model.instance().signUp(user, new Model.SuccessListener() {
                     @Override
                     public void onResult(boolean result) {
                         if (result) {
+                            Model.instance().setConnectedUser(user);
                             Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
                             startActivity(intent);
                         } else {

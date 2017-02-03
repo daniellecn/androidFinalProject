@@ -61,13 +61,14 @@ public class LoginFragment extends Fragment {
                 EditText name = (EditText) view.findViewById(R.id.loginName);
                 EditText pass = (EditText) view.findViewById(R.id.loginPassword);
 
-                User user = new User (name.getText().toString(), pass.getText().toString());
+                final User user = new User (name.getText().toString(), pass.getText().toString());
 
                 //progressBar.setVisibility(view.VISIBLE);
                 Model.instance().logIn(user, new Model.LogInListener() {
                     @Override
                     public void onComplete(boolean isLogIn) {
                         if (isLogIn){
+                            Model.instance().setConnectedUser(user);
                             Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
                             startActivity(intent);
                         }
@@ -84,6 +85,10 @@ public class LoginFragment extends Fragment {
                 });
             }
         });
+        ((EditText) view.findViewById(R.id.loginName)).setText("1");
+        ((EditText) view.findViewById(R.id.loginPassword)).setText("1");
+        loginButton.callOnClick();
+
         return view;
     }
 

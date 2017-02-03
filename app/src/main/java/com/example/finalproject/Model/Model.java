@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
+import android.graphics.PorterDuff;
+import android.media.Image;
 import android.util.Log;
 
 import java.util.LinkedList;
@@ -24,6 +26,8 @@ public class Model {
 
     private static int currentKey;
 
+    private static User connectedUser;
+
     public static Model instance(){
         return instance;
     }
@@ -35,6 +39,14 @@ public class Model {
 //        }
         remote = new ModelFirebase();
         local = new ModelSql();
+    }
+
+    public User getConnectedUser() {
+        return connectedUser;
+    }
+
+    public void setConnectedUser(User connectedUser) {
+        Model.connectedUser = connectedUser;
     }
 
     public interface LogInListener {
@@ -82,9 +94,19 @@ public class Model {
         return currentKey;
     }
 
-
     public List<Dessert> getDessertData() {
         return dessertData;
+//        getAllDessertAsynch(new GetAllDessertsAsynchListener() {
+//            @Override
+//            public void onComplete(List<Dessert> dessertList) {
+//                listener.onComplete(dessertList);
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                listener.onCancel();
+//            }
+//        });
     }
 
     public void logIn(User user, LogInListener listener){
@@ -97,28 +119,34 @@ public class Model {
 
     public void addDessert(final Dessert dessert, Bitmap dessertImageBitmap, final SuccessListener listener){
         // Save the image on the SD-CARD
-        ImageLocal.saveLocalImage(dessertImageBitmap, String.valueOf(dessert.getId()));
+        if (dessertImageBitmap != null) {
+            ImageLocal.saveLocalImage(dessertImageBitmap, String.valueOf(dessert.getId()));
 
-        // Upload image to firebase storage
-        ImageFirebase.saveImage(dessertImageBitmap, String.valueOf(dessert.getId()), new SaveImageListener() {
-            @Override
-            public void fail() {
-                listener.onResult(false);
-            }
+            // Upload image to firebase storage
+            ImageFirebase.saveRemoteImage(dessertImageBitmap, String.valueOf(dessert.getId()), new SaveImageListener() {
+                @Override
+                public void fail() {
+                    listener.onResult(false);
+                }
 
-            @Override
-            public void complete(String url) {
-                dessert.setImageUrl(url);
+                @Override
+                public void complete(String url) {
+                    dessert.setImageUrl(url);
 
-                // Save the dessert to firebase database
-                remote.addDessert(dessert, listener);
+                    // Save the dessert to firebase database
+                    remote.addDessert(dessert, listener);
 
-                listener.onResult(true);
-            }
-        });
+                    listener.onResult(true);
+                }
+            });
+        }
 
          // Update the key
         setCurrentKey(getCurrentKey() + 1);
+    }
+
+    public void updateDessert(Dessert dessert, Model.SuccessListener listener){
+        remote.addDessert(dessert, listener);
     }
 
     public void getAllDessertAsynch(final GetAllDessertsAsynchListener listener){
@@ -135,7 +163,14 @@ public class Model {
                     // Update the local db
                     double recentUpdate = lastUpdateDate;
                     for (Dessert dessert : dessertList){
-                        DessertSql.addDessert(local.getWritableDB(), dessert);
+                        // If new dessert
+                        if (local.getDessertById(dessert.getId()) == null){
+                            DessertSql.addDessert(local.getWritableDB(), dessert);
+                        }
+                        // If this update
+                        else{
+                            DessertSql.updateDessert(local.getWritableDB(), dessert);
+                        }
 
                         if (dessert.getLastUpdated() > recentUpdate){
                             recentUpdate = dessert.getLastUpdated();
@@ -146,7 +181,7 @@ public class Model {
                     DessertSql.setLastUpdateDate(local.getWritableDB(), recentUpdate);
 
                     // Update the current key
-                    if (getCurrentKey() < currentMaxKey){
+                    if (getCurrentKey() <= currentMaxKey){
                         setCurrentKey(currentMaxKey + 1);
                     }
                 }
@@ -161,5 +196,36 @@ public class Model {
                 listener.onCancel();
             }
         });
+    }
+
+    public Dessert getDessertById(int id){
+        return local.getDessertById(id);
+    }
+
+    public void getDessertImage(final Dessert dessert, int size, final Model.GetImageListener listener) {
+        Bitmap dessertImage;
+
+        // Get local image
+        dessertImage = ImageLocal.loadLocalImage(String.valueOf(dessert.getId()), size);
+
+        if (dessertImage != null) {
+            listener.onSuccess(dessertImage);
+        }
+        // If there is not a local image
+        else {
+            ImageFirebase.loadRemoteImage(dessert.getImageUrl(), new GetImageListener() {
+                @Override
+                public void onSuccess(Bitmap image) {
+                    // Save the image local
+                    ImageLocal.saveLocalImage(image, String.valueOf(dessert.getId()));
+                    listener.onSuccess(image);
+                }
+
+                @Override
+                public void onFail() {
+                    listener.onFail();
+                }
+            });
+        }
     }
 }

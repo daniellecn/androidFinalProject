@@ -136,8 +136,8 @@ public class DessertFirebase {
                 final List<Dessert> dessertList = new LinkedList<Dessert>();
 
                 // Create the desserts list
-                for (DataSnapshot stSnapshot : dataSnapshot.getChildren()) {
-                    Dessert dessert = stSnapshot.getValue(Dessert.class);
+                for (DataSnapshot dstSnapshot : dataSnapshot.getChildren()) {
+                    Dessert dessert = dstSnapshot.getValue(Dessert.class);
 
                     if (maxKey[0] < dessert.getId()){
                         maxKey[0]++;

@@ -3,4 +3,7 @@
     <item android:id="@+id/menuSave"
         android:title="@string/save"
         android:showAsAction="collapseActionView|ifRoom" />
+    <item android:id="@+id/menuDel"
+        android:title="@string/delete"
+        android:showAsAction="collapseActionView|ifRoom" />
 </menu>

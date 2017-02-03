@@ -7,9 +7,12 @@ import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.finalproject.Fragments.AddDessertFragment;
+import com.example.finalproject.Model.Model;
 import com.example.finalproject.R;
 
 public class AddDessertActivity extends Activity {
@@ -25,7 +28,5 @@ public class AddDessertActivity extends Activity {
         fragTran.commit();
 
         getActionBar().setIcon(R.color.colorPrimaryDark);
-
-        // TODO: be able to get id - for edit mode
     }
 }

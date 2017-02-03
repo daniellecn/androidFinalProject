@@ -21,7 +21,9 @@ public class UserFirebase {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User readUser = dataSnapshot.getValue(User.class);
 
-                if (user.getPassword().equals(readUser.getPassword())){
+                if ((readUser != null) && (user.getPassword().equals(readUser.getPassword()))){
+                    // TODO: return the user to the model
+                    Model.instance().setConnectedUser(readUser);
                     listener.onComplete(true);
                 }
                 else{
@@ -33,6 +35,7 @@ public class UserFirebase {
             public void onCancelled(DatabaseError databaseError) {
                 listener.onComplete(false);
             }
+
         });
     }
 

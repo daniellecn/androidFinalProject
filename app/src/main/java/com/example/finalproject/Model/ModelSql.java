@@ -26,6 +26,7 @@ public class ModelSql {
 
     public ModelSql() {
         helper = new Helper(AppContext.getAppContext());
+        helper.onUpgrade(getWritableDB(), 7, 7);
     }
 
     public SQLiteDatabase getWritableDB(){
@@ -40,43 +41,16 @@ public class ModelSql {
         DessertSql.addDessert(helper.getWritableDatabase(), dessert);
     }
 
-    public Dessert getDessertById(String id){
-        return DessertSql.getDessertById(helper.getReadableDatabase(), id);
+    public void updateDessert(Dessert dessert){
+        DessertSql.updateDessert(helper.getWritableDatabase(), dessert);
+    }
+
+    public Dessert getDessertById(int id){
+        return DessertSql.getDessertById(helper.getReadableDatabase(), String.valueOf(id));
     }
 
     public List<Dessert> getAllDesserts(){
         return DessertSql.getAllDesserts(helper.getReadableDatabase());
-    }
-
-    private void saveImageToFile(Bitmap imageBitmap, String imageFileName){
-        FileOutputStream fos;
-        OutputStream out = null;
-        try {
-            File dir = Environment.getExternalStoragePublicDirectory(
-                    Environment.DIRECTORY_PICTURES);
-            if (!dir.exists()) {
-                dir.mkdir();
-            }
-            File imageFile = new File(dir,imageFileName);
-
-            imageFile.createNewFile();
-
-            out = new FileOutputStream(imageFile);
-            imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
-            out.close();
-
-            //add the picture to the gallery so we dont need to manage the cache size
-            Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-            Uri contentUri = Uri.fromFile(imageFile);
-            mediaScanIntent.setData(contentUri);
-            AppContext.getAppContext().sendBroadcast(mediaScanIntent);
-            Log.d("TAG","add image to cache: " + imageFileName);
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
     }
 
     class Helper extends SQLiteOpenHelper {

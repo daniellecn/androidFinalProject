@@ -6,6 +6,7 @@
     <string name="createAccount">CREATE ACCOUNT</string>
     <string name="save">SAVE</string>
     <string name="edit">EDIT</string>
+    <string name="delete">DELETE</string>
 
     <!-- Screen elements -->
     <string name="email">Email</string>
@@ -30,12 +31,12 @@
     <string name="title_tab_start_date">Start date</string>
     <string name="title_tab_end_date">End date</string>
 
-    
+
     <!--Messages-->
     <string name="signupError">Username already taken</string>
     <string name="loginError">Username or Password incorrect</string>
-    <string name="addedSuccessfuly">Dessert added successfully! </string>
-    <string name="errorAdding">Error adding, try again</string>
+    <string name="updateSuccessfuly">Dessert updated successfully! </string>
+    <string name="errorOccure">An error has occured, please try again</string>
     <string name="errorImage">Error processing image</string>
 
     <!-- Dialogs -->

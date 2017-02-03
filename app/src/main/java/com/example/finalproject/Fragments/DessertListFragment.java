@@ -17,6 +17,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.example.finalproject.Activities.DessertActivity;
 import com.example.finalproject.Model.AppContext;
@@ -26,20 +27,35 @@ import com.example.finalproject.R;
 
 import java.util.List;
 
+import static android.app.Activity.RESULT_OK;
+
 
 /**
  * A simple {@link Fragment} subclass.
  */
 public class DessertListFragment extends ListFragment {
     private static final int REQUEST_WRITE_STORAGE = 112;
+    static final int NEW_DESSERT_REQUEST = 1;
 
-    List<Dessert> dissertListData;
+    List<Dessert> dessertListData;
+
     //ProgressBar progressBar;
     StudentsAdapter adapter;
 
     public DessertListFragment() {
         // Required empty public constructor
-        dissertListData = Model.instance().getDessertData();
+        dessertListData = Model.instance().getDessertData();
+//        Model.instance().getDessertData(new Model.GetAllDessertsAsynchListener() {
+//            @Override
+//            public void onComplete(List<Dessert> dessertList) {
+//                dessertListData = dessertList;
+//            }
+//
+//            @Override
+//            public void onCancel() {
+//                // TODO: message
+//            }
+//        });
     }
 
 
@@ -50,14 +66,6 @@ public class DessertListFragment extends ListFragment {
         View view = inflater.inflate(R.layout.fragment_dessert_list, container, false);
 
         /** Check permissions ***/
-//       boolean hasPermission = (ContextCompat.checkSelfPermission(AppContext.getAppContext(),
-//                android.Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
-//
-//        if (!hasPermission) {
-//            ActivityCompat.requestPermissions(getActivity(),
-//                    new String[]{android.Manifest.permission.WRITE_EXTERNAL_STORAGE},
-//                    REQUEST_WRITE_STORAGE);
-//        }
         boolean hasPermission = (ContextCompat.checkSelfPermission(AppContext.getAppContext(),
                 android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED);
 
@@ -71,8 +79,6 @@ public class DessertListFragment extends ListFragment {
                             Manifest.permission.READ_EXTERNAL_STORAGE},
                     REQUEST_WRITE_STORAGE);
         }
-
-
         /** END Check permissions ***/
 
         // Get elements from screen
@@ -88,24 +94,24 @@ public class DessertListFragment extends ListFragment {
 
     public void onListItemClick(ListView l, View v, int position, long id) {
         Intent intent = new Intent(getActivity().getApplicationContext(), DessertActivity.class);
+        intent.putExtra("id", dessertListData.get(position).getId());
         startActivity(intent);
     }
 
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
-//        // Check which request we're responding to
-//        if (requestCode == NEW_STUDENT_REQUEST) {
-//            // Make sure the request was successful
-//            if (resultCode == RESULT_OK) {
-//                loadStudentsData();
-//            }
-//        }
-//    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        // Check which request we're responding to
+        if (requestCode == NEW_DESSERT_REQUEST) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                loadDessertsListData();
+            }
+        }
+    }
 
     private void loadDessertsListData(){
         // Display progress bar
         //progressBar.setVisibility(View.VISIBLE);
-
         Model.instance().getAllDessertAsynch(new Model.GetAllDessertsAsynchListener() {
             @Override
             public void onComplete(List<Dessert> dessertList) {
@@ -113,7 +119,7 @@ public class DessertListFragment extends ListFragment {
                 //progressBar.setVisibility(View.GONE);
 
                 // Update list data
-                dissertListData = dessertList;
+                dessertListData = dessertList;
 
                 // Update the presented list
                 adapter.notifyDataSetChanged();
@@ -121,7 +127,7 @@ public class DessertListFragment extends ListFragment {
 
             @Override
             public void onCancel() {
-
+                // TODO: message
             }
         });
     }
@@ -130,12 +136,12 @@ public class DessertListFragment extends ListFragment {
 
         @Override
         public int getCount() {
-            return dissertListData.size();
+            return dessertListData.size();
         }
 
         @Override
         public Object getItem(int i) {
-            return dissertListData.get(i);
+            return dessertListData.get(i);
         }
 
         @Override
@@ -150,15 +156,26 @@ public class DessertListFragment extends ListFragment {
                 view = inflater.inflate(R.layout.dessert_list_row,null);
             }
 
-            Dessert dessert = dissertListData.get(i);
-            final ImageView dessertImage = (ImageView) view.findViewById(R.id.dishRowImage);
+            final Dessert dessert = dessertListData.get(i);
 
-            // If there is a image to display
-            if (dessert.getImageUrl() != null && dessert.getImageUrl() != ""){
-            }
+            ((TextView) view.findViewById(R.id.dishRowLable)).setText(dessert.getName());
+            ((TextView) view.findViewById(R.id.dishRowDesc)).setText(dessert.getDescription());
 
-            return view;
+            final View finalView = view;
+            Model.instance().getDessertImage(dessert, 4, new Model.GetImageListener() {
+                @Override
+                public void onSuccess(Bitmap image) {
+                    ((ImageView) finalView.findViewById(R.id.dishRowImage)).setImageBitmap(image);
+                }
+
+                @Override
+                public void onFail() {
+                    // TODO : message
+                }
+
+            });
+
+            return finalView;
         }
     }
-
 }

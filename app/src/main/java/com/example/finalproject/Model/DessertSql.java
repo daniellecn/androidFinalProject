@@ -62,6 +62,27 @@ public class DessertSql {
         }
     }
 
+    public static void updateDessert(SQLiteDatabase db, Dessert dessert){
+        ContentValues values = new ContentValues();
+
+        // Set values
+        values.put(ID, dessert.getId());
+        values.put(NAME, dessert.getName());
+        values.put(DESC, dessert.getDescription());
+        values.put(IMAGE_URL, dessert.getImageUrl());
+        values.put(COST, dessert.getCost());
+        values.put(DATES, dessert.getDatesAvailable());
+
+        String whereClause = ID + " = ?";
+        String[] whereArg = new String[]{String.valueOf(dessert.getId())};
+
+        // Add to local db
+        long rowId = db.updateWithOnConflict(DESSERTS_TABLE, values, whereClause, whereArg, SQLiteDatabase.CONFLICT_REPLACE);
+        if (rowId <= 0) {
+            Log.e("SQLite","fail to insert into student");
+        }
+    }
+
     public static Dessert getDessertById(SQLiteDatabase db, String id)    {
         // Set the selection parameters
         String[] selectArg = {id};

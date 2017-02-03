@@ -1,8 +1,9 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:fillViewport="true"
     style="@style/AppTheme"
     tools:context="com.example.finalproject.Fragments.DessertFragment">
 
@@ -18,7 +19,11 @@
                 android:layout_height="match_parent"
                 android:gravity="center"
                 android:src="@drawable/dessert"
-                android:id="@+id/dishImg" />
+                android:id="@+id/dishImg"
+                android:paddingLeft="25dp"
+                android:scaleType="centerCrop"
+                android:adjustViewBounds="true"
+                />
         </TableRow>
 
         <TableRow
@@ -81,4 +86,4 @@
     </TableLayout>
 
 
-</LinearLayout>
+</ScrollView>
