@@ -91,8 +91,8 @@ public class DateRangePickerFragment extends DialogFragment implements View.OnCl
     @Override
     public void onClick(View v) {
         dismiss();
-        onDateRangeSelectedListener.onDateRangeSelected(startDatePicker.getDayOfMonth(),startDatePicker.getMonth(),startDatePicker.getYear(),
-                endDatePicker.getDayOfMonth(),endDatePicker.getMonth(),endDatePicker.getYear());
+        onDateRangeSelectedListener.onDateRangeSelected(startDatePicker.getDayOfMonth(),startDatePicker.getMonth() + 1,startDatePicker.getYear(),
+                endDatePicker.getDayOfMonth(),endDatePicker.getMonth() + 1,endDatePicker.getYear());
     }
 
     public interface OnDateRangeSelectedListener {
