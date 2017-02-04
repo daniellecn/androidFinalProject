@@ -140,6 +140,11 @@ public class Model {
                 }
             });
         }
+        // Save without image
+        else{
+            // Save the dessert to firebase database
+            remote.addDessert(dessert, listener);
+        }
 
          // Update the key
         setCurrentKey(getCurrentKey() + 1);

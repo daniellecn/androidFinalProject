@@ -10,6 +10,7 @@ import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Matrix;
+import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
@@ -58,6 +59,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
     private int mode;
     private Dessert newDessert;
     private String selectedImagePath;
+    private Bitmap oldImageBitmap;
     private Bitmap selectedImageBitmap;
 
     public AddDessertFragment() {
@@ -113,7 +115,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
             Model.instance().getDessertImage(getNewDessert(), 8, new Model.GetImageListener() {
                 @Override
                 public void onSuccess(Bitmap image) {
-                    ((ImageView) view.findViewById(R.id.addImg)).setImageBitmap(Bitmap.createScaledBitmap(image, image.getWidth(),180, false));
+                    ((ImageView) view.findViewById(R.id.addImg)).setImageBitmap(Bitmap.createScaledBitmap(image, image.getWidth(), 180, false));
                 }
 
                 @Override
@@ -122,6 +124,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                 }
             });
 
+            oldImageBitmap = ((BitmapDrawable) ((ImageView) getView().findViewById(R.id.addImg)).getDrawable()).getBitmap();
             mode = EDIT_MODE;
         }
         // Add mode
@@ -141,7 +144,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
         inflater.inflate(R.menu.add_menu, menu);
 
         // If add mode - remove delete button
-        if (mode == ADD_MODE){
+        if (mode == ADD_MODE) {
             menu.removeItem(R.id.menuDel);
         }
 
@@ -157,8 +160,14 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                 getNewDessert().setDescription(((EditText) getView().findViewById(R.id.addDesc)).getText().toString());
                 getNewDessert().setCost(((EditText) getView().findViewById(R.id.addCost)).getText().toString());
                 getNewDessert().setDatesAvailable(((TextView) getView().findViewById(R.id.addDates)).getText().toString());
+                selectedImageBitmap = ((BitmapDrawable) ((ImageView) getView().findViewById(R.id.addImg)).getDrawable()).getBitmap();
 
-                // Add the dessert
+                // If there is not need to update the image
+                if (oldImageBitmap == selectedImageBitmap) {
+                    selectedImageBitmap = null;
+                }
+
+                // Add\update the dessert
                 Model.instance().addDessert(getNewDessert(), selectedImageBitmap, new Model.SuccessListener() {
                     @Override
                     public void onResult(boolean result) {
