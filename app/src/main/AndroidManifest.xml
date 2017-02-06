@@ -43,7 +43,7 @@
         <activity
             android:name=".Activities.DessertActivity"
             android:label="@string/title_activity_dish"
-            android:parentActivityName=".Activities.DessertListActivity" />
+            android:parentActivityName=".Activities.DessertListActivity"/>
         <activity
             android:name=".Activities.DessertListActivity"
             android:label="@string/title_activity_list_dish">
@@ -53,7 +53,8 @@
         </activity>
         <activity
             android:name=".Activities.AddDessertActivity"
-            android:label="">
+            android:label=""
+            android:parentActivityName=".Activities.DessertListActivity">
             <intent-filter>
                 <action android:name="android.media.action.IMAGE_CAPTURE" />
                 <category android:name="android.intent.category.DEFAULT" />

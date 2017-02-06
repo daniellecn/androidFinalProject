@@ -162,7 +162,7 @@ public class DessertListFragment extends ListFragment {
             ((TextView) view.findViewById(R.id.dishRowDesc)).setText(dessert.getDescription());
 
             final View finalView = view;
-            Model.instance().getDessertImage(dessert, 4, new Model.GetImageListener() {
+            Model.instance().getDessertImage(dessert, 0, new Model.GetImageListener() {
                 @Override
                 public void onSuccess(Bitmap image) {
                     ((ImageView) finalView.findViewById(R.id.dishRowImage)).setImageBitmap(image);

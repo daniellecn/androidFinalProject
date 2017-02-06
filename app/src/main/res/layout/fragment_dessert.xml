@@ -1,4 +1,4 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -9,17 +9,16 @@
 
     <TableLayout
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_margin="10dp">
+        android:layout_height="wrap_content">
 
         <TableRow
             android:layout_margin="10dp">
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="180dp"
                 android:gravity="center"
-                android:src="@drawable/dessert"
                 android:id="@+id/dishImg"
+                android:src="@drawable/image_placeholder"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 />
@@ -85,4 +84,4 @@
     </TableLayout>
 
 
-</FrameLayout>
+</ScrollView>

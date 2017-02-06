@@ -140,7 +140,7 @@ public class DessertFirebase {
                     Dessert dessert = dstSnapshot.getValue(Dessert.class);
 
                     if (maxKey[0] < dessert.getId()){
-                        maxKey[0]++;
+                        maxKey[0] = dessert.getId();
                     }
 
                     dessertList.add(dessert);

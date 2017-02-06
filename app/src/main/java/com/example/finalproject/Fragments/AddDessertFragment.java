@@ -113,10 +113,10 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
             ((EditText) view.findViewById(R.id.addCost)).setText((getNewDessert().getCost()));
             ((TextView) view.findViewById(R.id.addDates)).setText(getNewDessert().getDatesAvailable());
 
-            Model.instance().getDessertImage(getNewDessert(), 4, new Model.GetImageListener() {
+            Model.instance().getDessertImage(getNewDessert(), 0, new Model.GetImageListener() {
                 @Override
                 public void onSuccess(Bitmap image) {
-                    ((ImageView) view.findViewById(R.id.addImg)).setImageBitmap(Bitmap.createScaledBitmap(image, image.getWidth(), 180, false));
+                    ((ImageView) view.findViewById(R.id.addImg)).setImageBitmap(image);//Bitmap.createScaledBitmap(image, image.getWidth(), 180, false));
                     oldImageBitmap = image;
                 }
 

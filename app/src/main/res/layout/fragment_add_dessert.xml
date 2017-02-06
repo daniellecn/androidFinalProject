@@ -20,7 +20,6 @@
                 android:layout_height="180dp"
                 android:gravity="center"
                 android:src="@drawable/image_placeholder"
-                android:paddingLeft="25dp"
                 android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
                 android:id="@+id/addImg" />

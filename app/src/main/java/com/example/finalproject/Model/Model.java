@@ -8,6 +8,8 @@ import android.graphics.PorterDuff;
 import android.media.Image;
 import android.util.Log;
 
+import com.example.finalproject.R;
+
 import java.util.LinkedList;
 import java.util.List;
 

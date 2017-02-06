@@ -47,7 +47,7 @@ public class DessertFragment extends Fragment {
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_dessert, container, false);
 
-        Model.instance().getDessertImage(getCurrentDessert(), 4, new Model.GetImageListener() {
+        Model.instance().getDessertImage(getCurrentDessert(), 0, new Model.GetImageListener() {
             @Override
             public void onSuccess(Bitmap image) {
                 ((ImageView) view.findViewById(R.id.dishImg)).setImageBitmap(image);
@@ -62,7 +62,14 @@ public class DessertFragment extends Fragment {
         ((TextView) view.findViewById(R.id.dishLable)).setText(getCurrentDessert().getName());
         ((TextView) view.findViewById(R.id.dishDesc)).setText(getCurrentDessert().getDescription());
         ((TextView) view.findViewById(R.id.dishCost)).setText(getCurrentDessert().getCost());
-        ((TextView) view.findViewById(R.id.dishDates)).setText(getCurrentDessert().getDatesAvailable());
+
+        // If not chosen dates
+        if (getCurrentDessert().getDatesAvailable().equals(getString(R.string.enter_dates))){
+            ((TextView) view.findViewById(R.id.dishDates)).setText("");
+        }
+        else{
+            ((TextView) view.findViewById(R.id.dishDates)).setText(getCurrentDessert().getDatesAvailable());
+        }
 
         // Action bar
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
@@ -93,7 +100,6 @@ public class DessertFragment extends Fragment {
 
                 //  Replace the fragment
                 transaction.replace(R.id.dishContainer, fragment);
-                transaction.addToBackStack(null);
                 transaction.commit();
 
                 return true;
