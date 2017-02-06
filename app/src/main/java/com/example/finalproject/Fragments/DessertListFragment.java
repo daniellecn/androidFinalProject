@@ -40,7 +40,7 @@ public class DessertListFragment extends ListFragment {
     List<Dessert> dessertListData;
 
     //ProgressBar progressBar;
-    StudentsAdapter adapter;
+    DesseertAdapter adapter;
 
     public DessertListFragment() {
         // Required empty public constructor
@@ -84,7 +84,7 @@ public class DessertListFragment extends ListFragment {
         // Get elements from screen
         //progressBar = (ProgressBar) view.findViewById(R.id.listProgressBar);
 
-        adapter = new StudentsAdapter();
+        adapter = new DesseertAdapter();
         setListAdapter(adapter);
 
         loadDessertsListData();
@@ -132,7 +132,7 @@ public class DessertListFragment extends ListFragment {
         });
     }
 
-    class StudentsAdapter extends BaseAdapter {
+    class DesseertAdapter extends BaseAdapter {
 
         @Override
         public int getCount() {

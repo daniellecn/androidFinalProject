@@ -94,6 +94,8 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
             }
         });
 
+
+
         // Date range button
         TextView dateRange = (TextView) view.findViewById(R.id.addDates);
         dateRange.setOnClickListener(new View.OnClickListener() {
@@ -112,10 +114,11 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
             ((EditText) view.findViewById(R.id.addCost)).setText((getNewDessert().getCost()));
             ((TextView) view.findViewById(R.id.addDates)).setText(getNewDessert().getDatesAvailable());
 
-            Model.instance().getDessertImage(getNewDessert(), 8, new Model.GetImageListener() {
+            Model.instance().getDessertImage(getNewDessert(), 4, new Model.GetImageListener() {
                 @Override
                 public void onSuccess(Bitmap image) {
                     ((ImageView) view.findViewById(R.id.addImg)).setImageBitmap(Bitmap.createScaledBitmap(image, image.getWidth(), 180, false));
+                    oldImageBitmap = image;
                 }
 
                 @Override
@@ -124,7 +127,6 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                 }
             });
 
-            oldImageBitmap = ((BitmapDrawable) ((ImageView) getView().findViewById(R.id.addImg)).getDrawable()).getBitmap();
             mode = EDIT_MODE;
         }
         // Add mode
@@ -167,7 +169,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                     selectedImageBitmap = null;
                 }
 
-                // Add\update the dessert
+                // Add / update the dessert
                 Model.instance().addDessert(getNewDessert(), selectedImageBitmap, new Model.SuccessListener() {
                     @Override
                     public void onResult(boolean result) {
