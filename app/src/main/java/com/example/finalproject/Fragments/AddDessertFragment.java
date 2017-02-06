@@ -90,10 +90,9 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
         addImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startDialog();
+                startImageDialog();
             }
         });
-
 
 
         // Date range button
@@ -190,6 +189,8 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                 });
                 return true;
             }
+            case R.id.menuDel:
+                startDeleteDialog();
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -207,7 +208,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
         dates.setTextColor(getResources().getColor(R.color.blackText));
     }
 
-    private void startDialog() {
+    private void startImageDialog() {
         AlertDialog.Builder optionsAlert = new AlertDialog.Builder(
                 getActivity());
         optionsAlert.setTitle(getString(R.string.uploadOptionsTitle));
@@ -253,6 +254,45 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                         }
                     }
                 });
+        optionsAlert.show();
+    }
+
+    private void startDeleteDialog() {
+        final AlertDialog.Builder optionsAlert = new AlertDialog.Builder(
+                getActivity());
+        optionsAlert.setTitle(getString(R.string.deleteTitle));
+        optionsAlert.setMessage(getString(R.string.deleteQuestion));
+
+        /** OK option**/
+        optionsAlert.setPositiveButton(getString(R.string.deleteOK),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                        Model.instance().deleteDessert(getNewDessert().getId(), getNewDessert().getImageUrl(), new Model.SuccessListener() {
+                            @Override
+                            public void onResult(boolean result) {
+                                // Display message
+                                if (result) {
+                                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.deleteSuccessfuly),
+                                            Toast.LENGTH_SHORT).show();
+                                } else {
+                                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errorOccure),
+                                            Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
+                        // Return to the list activity
+                        Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
+                        startActivity(intent);
+                    }
+                });
+
+        /** Cancle option**/
+        optionsAlert.setNegativeButton(getString(R.string.deleteCancle),
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface arg0, int arg1) {
+                    }
+                });
+
         optionsAlert.show();
     }
 

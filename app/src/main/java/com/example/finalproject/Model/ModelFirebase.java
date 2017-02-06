@@ -42,4 +42,9 @@ public class ModelFirebase {
     public void getDessertById(double id, final Model.GetDessertListener listener){
         DessertFirebase.getDessertById(id, listener);
     }
+
+    public void deleteDessert(int id, String url, Model.SuccessListener listener){
+        DessertFirebase.deleteDessert(id, listener);
+        ImageFirebase.deleteRemoteImage(url, listener);
+    }
 }

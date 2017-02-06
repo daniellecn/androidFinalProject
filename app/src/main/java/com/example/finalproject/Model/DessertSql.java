@@ -152,4 +152,11 @@ public class DessertSql {
     public static void setLastUpdateDate(SQLiteDatabase db, double date){
         LastUpdateSql.setLastUpdate(db,DESSERTS_TABLE, date);
     }
+
+    public static void deleteDessert(int id, SQLiteDatabase db){
+        // Set the where parameters
+        String[] selectArg = {String.valueOf(id)};
+
+        db.delete(DESSERTS_TABLE, ID + " = ?", selectArg);
+    }
 }

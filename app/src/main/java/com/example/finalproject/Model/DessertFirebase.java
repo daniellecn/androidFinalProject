@@ -154,6 +154,10 @@ public class DessertFirebase {
             }
         });
     }
+
+    public static void deleteDessert(int id, Model.SuccessListener listener){
+        database.getReference("desserts").child(String.valueOf(id)).removeValue();
+    }
 }
 
 

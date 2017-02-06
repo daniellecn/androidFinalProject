@@ -233,4 +233,15 @@ public class Model {
             });
         }
     }
+
+    public void deleteDessert(int id, String url, Model.SuccessListener listener){
+        try {
+            local.deleteDessert(id);
+            remote.deleteDessert(id, url, listener);
+            listener.onResult(true);
+        }
+        catch (Exception e){
+            listener.onResult(false);
+        }
+    }
 }

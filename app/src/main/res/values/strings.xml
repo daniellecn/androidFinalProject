@@ -36,6 +36,7 @@
     <string name="signupError">Username already taken</string>
     <string name="loginError">Username or Password incorrect</string>
     <string name="updateSuccessfuly">Dessert updated successfully! </string>
+    <string name="deleteSuccessfuly">Dessert deleted successfully! </string>
     <string name="errorOccure">An error has occured, please try again</string>
     <string name="errorImage">Error processing image</string>
 
@@ -44,6 +45,10 @@
     <string name="uploadOptionsQuestion">How do you want to set your picture?</string>
     <string name="uploadGalleryOption">Gallery</string>
     <string name="uploadCameraOption">Camera</string>
+    <string name="deleteTitle">Delete dessert</string>
+    <string name="deleteQuestion">Are you sure you want to delete?</string>
+    <string name="deleteOK">OK</string>
+    <string name="deleteCancle">Cancle</string>
 
     <!-- Suffix -->
     <string name="jpg">.jpg</string>

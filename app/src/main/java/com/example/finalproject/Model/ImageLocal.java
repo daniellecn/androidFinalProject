@@ -59,4 +59,12 @@ public class ImageLocal {
         }
         return bitmap;
     }
+
+    public static void deleteLocalImage (String imageFileName){
+        File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES + "/Bakery/" + imageFileName + ".jpg");
+        if(file.exists())
+        {
+            file.delete();
+        }
+    }
 }

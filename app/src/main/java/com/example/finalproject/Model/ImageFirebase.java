@@ -44,7 +44,7 @@ public class ImageFirebase {
         });
     }
 
-    public static void loadRemoteImage(String url, final Model.GetImageListener listener){
+    public static void loadRemoteImage(String url, final Model.GetImageListener listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference httpsReference = storage.getReferenceFromUrl(url);
         final long ONE_MEGABYTE = 1024 * 1024;
@@ -52,7 +52,7 @@ public class ImageFirebase {
         httpsReference.getBytes(10 * ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 listener.onSuccess(image);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -61,5 +61,12 @@ public class ImageFirebase {
                 listener.onFail();
             }
         });
+    }
+
+    public static void deleteRemoteImage(String url, Model.SuccessListener listener) {
+        FirebaseStorage storage = FirebaseStorage.getInstance();
+        StorageReference httpsReference = storage.getReferenceFromUrl(url);
+        httpsReference.delete();
+        listener.onResult(true);
     }
 }

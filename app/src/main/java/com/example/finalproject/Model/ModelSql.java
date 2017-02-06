@@ -53,6 +53,11 @@ public class ModelSql {
         return DessertSql.getAllDesserts(helper.getReadableDatabase());
     }
 
+    public void deleteDessert(int id){
+        DessertSql.deleteDessert(id, getWritableDB());
+        ImageLocal.deleteLocalImage(String.valueOf(id));
+    }
+
     class Helper extends SQLiteOpenHelper {
 
 
