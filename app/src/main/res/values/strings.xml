@@ -33,12 +33,14 @@
 
 
     <!--Messages-->
-    <string name="signupError">Username already taken</string>
+    <string name="signupUsernameError">Username already taken</string>
+    <string name="signupMailError">Mail used in different account</string>
     <string name="loginError">Username or Password incorrect</string>
     <string name="updateSuccessfuly">Dessert updated successfully! </string>
     <string name="deleteSuccessfuly">Dessert deleted successfully! </string>
     <string name="errorOccure">An error has occured, please try again</string>
     <string name="errorImage">Error processing image</string>
+    <string name="emptyField">Required field</string>
 
     <!-- Dialogs -->
     <string name="uploadOptionsTitle">"Upload Pictures Option</string>

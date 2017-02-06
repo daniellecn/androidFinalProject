@@ -246,4 +246,12 @@ public class Model {
             listener.onResult(false);
         }
     }
+
+    public void isUserNameExist(String userName, Model.SuccessListener listener){
+        remote.isUserNameExist(userName, listener);
+    }
+
+    public void isUserMailExist(String userMail, Model.SuccessListener listener){
+        remote.isUserMailExist(userMail, listener);
+    }
 }

@@ -41,24 +41,57 @@ public class SignupFragment extends Fragment {
         signupButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EditText userName = (EditText) view.findViewById(R.id.signName);
-                EditText userPass = (EditText) view.findViewById(R.id.signPassword);
-                final User user = new User(userName.getText().toString(), userPass.getText().toString());
+                final User[] user = new User[1];
+                final EditText userName = (EditText) view.findViewById(R.id.signName);
+                final EditText userPass = (EditText) view.findViewById(R.id.signPassword);
+                final EditText userMail = (EditText) view.findViewById(R.id.signMail);
 
-                Model.instance().signUp(user, new Model.SuccessListener() {
+                /*** Validation ***/
+                Model.instance().isUserNameExist(userName.getText().toString(), new Model.SuccessListener() {
                     @Override
                     public void onResult(boolean result) {
                         if (result) {
-                            Model.instance().setConnectedUser(user);
-                            Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
-                            startActivity(intent);
+                            userName.setError(getString(R.string.signupUsernameError));
                         } else {
-                            Context context = getActivity().getApplicationContext();
-                            CharSequence text = getString(R.string.signupError);
-                            int duration = Toast.LENGTH_SHORT;
+                            Model.instance().isUserMailExist(userMail.getText().toString(), new Model.SuccessListener() {
+                                @Override
+                                public void onResult(boolean result) {
+                                    if (result) {
+                                        userMail.setError(getString(R.string.signupMailError));
+                                    } else {
+                                        if (userName.getText() == null) {
+                                            userName.setError(getString(R.string.emptyField));
+                                        } else if (userPass.getText() == null) {
+                                            userPass.setError(getString(R.string.emptyField));
+                                        } else if (userMail.getText() == null) {
+                                            userMail.setError(getString(R.string.emptyField));
+                                        }
+                                        /*** Create account ***/
+                                        else {
+                                            user[0] = new User(userName.getText().toString(), userPass.getText().toString(), userMail.getText().toString());
 
-                            Toast toast = Toast.makeText(context, text, duration);
-                            toast.show();
+
+                                            Model.instance().signUp(user[0], new Model.SuccessListener() {
+                                                @Override
+                                                public void onResult(boolean result) {
+                                                    if (result) {
+                                                        Model.instance().setConnectedUser(user[0]);
+                                                        Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
+                                                        startActivity(intent);
+                                                    } else {
+                                                        Context context = getActivity().getApplicationContext();
+                                                        CharSequence text = getString(R.string.signupUsernameError);
+                                                        int duration = Toast.LENGTH_SHORT;
+
+                                                        Toast toast = Toast.makeText(context, text, duration);
+                                                        toast.show();
+                                                    }
+                                                }
+                                            });
+                                        }
+                                    }
+                                }
+                            });
                         }
                     }
                 });

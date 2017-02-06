@@ -9,6 +9,7 @@ import android.app.AlertDialog;
 public class User {
     private String name;
     private String password;
+    private String mail;
     private boolean admin;
 
     public User() {
@@ -20,9 +21,17 @@ public class User {
         this.admin = false;
     }
 
-    public User(String name, String password, boolean admin) {
+    public User(String name, String password, String mail) {
         this.name = name;
         this.password = password;
+        this.mail = mail;
+        this.admin = false;
+    }
+
+    public User(String name, String password, String mail, boolean admin) {
+        this.name = name;
+        this.password = password;
+        this.mail = mail;
         this.admin = admin;
     }
 
@@ -48,5 +57,13 @@ public class User {
 
     public void setAdmin(boolean admin) {
         this.admin = admin;
+    }
+
+    public String getMail() {
+        return mail;
+    }
+
+    public void setMail(String mail) {
+        this.mail = mail;
     }
 }
