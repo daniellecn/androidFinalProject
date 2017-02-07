@@ -75,6 +75,7 @@ public class SignupFragment extends Fragment {
                                                 @Override
                                                 public void onResult(boolean result) {
                                                     if (result) {
+                                                        getActivity().finish();
                                                         Model.instance().setConnectedUser(user[0]);
                                                         Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
                                                         startActivity(intent);

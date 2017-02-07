@@ -2,6 +2,7 @@ package com.example.finalproject.Fragments;
 
 
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
@@ -68,6 +69,7 @@ public class LoginFragment extends Fragment {
                     @Override
                     public void onComplete(boolean isLogIn) {
                         if (isLogIn){
+                            getActivity().finish();
                             Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
                             startActivity(intent);
                         }
@@ -90,5 +92,4 @@ public class LoginFragment extends Fragment {
 
         return view;
     }
-
 }

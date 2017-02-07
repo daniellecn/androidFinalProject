@@ -177,6 +177,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                             Toast.makeText(getActivity().getApplicationContext(), getString(R.string.updateSuccessfuly),
                                     Toast.LENGTH_SHORT).show();
 
+                            getActivity().finish();
                             // Return to the list activity
                             Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
                             startActivity(intent);
@@ -280,6 +281,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                                 }
                             }
                         });
+                        getActivity().finish();
                         // Return to the list activity
                         Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
                         startActivity(intent);
@@ -379,6 +381,4 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
             dessertImage.setImageBitmap(selectedImageBitmap);
         }
     }
-
-
 }
