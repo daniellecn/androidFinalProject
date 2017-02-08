@@ -18,7 +18,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
-import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -81,8 +80,7 @@ public class DessertListFragment extends ListFragment {
         if (Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) {
             String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
             dessertListData = Model.instance().getBySearch(query);
-        }
-        else{
+        } else {
             loadDessertsListData();
         }
 
@@ -111,7 +109,7 @@ public class DessertListFragment extends ListFragment {
     private void loadDessertsListData() {
         Model.instance().getAllDessertAsynch(new Model.GetAllDessertsAsynchListener() {
             @Override
-            public void onComplete(List<Dessert> dessertList){
+            public void onComplete(List<Dessert> dessertList) {
 
                 // Cancel progress bar
                 progressBar.setVisibility(View.GONE);

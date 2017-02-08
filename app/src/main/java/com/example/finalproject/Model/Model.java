@@ -1,15 +1,6 @@
 package com.example.finalproject.Model;
 
-import android.content.Context;
-import android.database.sqlite.SQLiteDatabase;
-import android.database.sqlite.SQLiteOpenHelper;
 import android.graphics.Bitmap;
-import android.graphics.PorterDuff;
-import android.media.Image;
-import android.util.Log;
-
-import com.example.finalproject.R;
-
 import java.util.LinkedList;
 import java.util.List;
 

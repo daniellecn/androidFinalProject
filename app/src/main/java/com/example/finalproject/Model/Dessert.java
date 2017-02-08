@@ -32,7 +32,7 @@ public class Dessert {
         this.datesAvailable = datesAvailable;
     }
 
-    public Dessert(Dessert dessert){
+    public Dessert(Dessert dessert) {
         this.id = dessert.getId();
         this.name = dessert.getName();
         this.description = dessert.getDescription();

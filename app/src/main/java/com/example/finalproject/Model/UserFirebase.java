@@ -1,7 +1,5 @@
 package com.example.finalproject.Model;
 
-import android.graphics.PorterDuff;
-
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -14,7 +12,7 @@ import com.google.firebase.database.ValueEventListener;
 
 public class UserFirebase {
 
-    public static void userLogIn(final User user, final Model.LogInListener listener){
+    public static void userLogIn(final User user, final Model.LogInListener listener) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users").child(user.getName());
 
@@ -23,11 +21,10 @@ public class UserFirebase {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User readUser = dataSnapshot.getValue(User.class);
 
-                if ((readUser != null) && (user.getPassword().equals(readUser.getPassword()))){
+                if ((readUser != null) && (user.getPassword().equals(readUser.getPassword()))) {
                     Model.instance().setConnectedUser(readUser);
                     listener.onComplete(true);
-                }
-                else{
+                } else {
                     listener.onComplete(false);
                 }
             }
@@ -40,7 +37,7 @@ public class UserFirebase {
         });
     }
 
-    public static void userSignUp(User user, final Model.SignUpListener listener){
+    public static void userSignUp(User user, final Model.SignUpListener listener) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users").child(user.getName());
 
@@ -49,10 +46,9 @@ public class UserFirebase {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User readUser = dataSnapshot.getValue(User.class);
 
-                if (readUser == null){
+                if (readUser == null) {
                     listener.onComplete(false);
-                }
-                else{
+                } else {
                     listener.onComplete(true);
                 }
             }
@@ -64,13 +60,13 @@ public class UserFirebase {
         });
     }
 
-    public static void addUser(User user){
+    public static void addUser(User user) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users").child(user.getName());
         myRef.setValue(user);
     }
 
-    public static void isUserNameExist(final String userName, final Model.SuccessListener listener){
+    public static void isUserNameExist(final String userName, final Model.SuccessListener listener) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users").child(userName);
 
@@ -79,10 +75,9 @@ public class UserFirebase {
             public void onDataChange(DataSnapshot dataSnapshot) {
                 User readUser = dataSnapshot.getValue(User.class);
 
-                if (readUser == null){
+                if (readUser == null) {
                     listener.onResult(false);
-                }
-                else{
+                } else {
                     listener.onResult(true);
                 }
             }
@@ -95,7 +90,7 @@ public class UserFirebase {
         });
     }
 
-    public static void isUserMailExist(final String userMail, final Model.SuccessListener listener){
+    public static void isUserMailExist(final String userMail, final Model.SuccessListener listener) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("users");
 
@@ -106,7 +101,7 @@ public class UserFirebase {
                 for (DataSnapshot dstSnapshot : dataSnapshot.getChildren()) {
                     User readUser = dstSnapshot.getValue(User.class);
 
-                    if (readUser.getMail().toString().equals(userMail)){
+                    if (readUser.getMail().toString().equals(userMail)) {
                         result = true;
                     }
                 }

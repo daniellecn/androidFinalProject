@@ -27,7 +27,7 @@ import java.util.List;
 public class DessertFirebase {
     private static FirebaseDatabase database = FirebaseDatabase.getInstance();
 
-    public static void addDessert(Dessert dessert, final Model.SuccessListener listener){
+    public static void addDessert(Dessert dessert, final Model.SuccessListener listener) {
         DatabaseReference myRef = database.getReference("desserts").child(String.valueOf(dessert.getId()));
         myRef.setValue(dessert.toMap());
 
@@ -44,7 +44,7 @@ public class DessertFirebase {
         });
     }
 
-    private void saveImage(Bitmap imageBmp, String name, final Model.SaveImageListener listener){
+    private void saveImage(Bitmap imageBmp, String name, final Model.SaveImageListener listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference imagesRef = storage.getReference().child("images").child(name);
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
@@ -66,15 +66,15 @@ public class DessertFirebase {
         });
     }
 
-    private void getImage(String url, final Model.GetImageListener listener){
+    private void getImage(String url, final Model.GetImageListener listener) {
         FirebaseStorage storage = FirebaseStorage.getInstance();
         StorageReference httpsReference = storage.getReferenceFromUrl(url);
         final long ONE_MEGABYTE = 1024 * 1024;
 
-        httpsReference.getBytes(3* ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+        httpsReference.getBytes(3 * ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
             @Override
             public void onSuccess(byte[] bytes) {
-                Bitmap image = BitmapFactory.decodeByteArray(bytes,0,bytes.length);
+                Bitmap image = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 listener.onSuccess(image);
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -85,28 +85,7 @@ public class DessertFirebase {
         });
     }
 
-//    public static void getAllDesserts(final Model.GetAllDessertsListener listener){
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("desserts");
-//
-//        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                List<Dessert> desserts = new LinkedList<Dessert>();
-//                for (DataSnapshot stSnapshot : dataSnapshot.getChildren()) {
-//                    Dessert dessert = stSnapshot.getValue(Dessert.class);
-//                    desserts.add(dessert);
-//                }
-//                listener.onComplete(desserts);
-//            }
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//                listener.onComplete(null);
-//            }
-//        });
-//    }
-
-    public static void getDessertById(double id, final Model.GetDessertListener listener){
+    public static void getDessertById(double id, final Model.GetDessertListener listener) {
         DatabaseReference myRef = database.getReference("desserts").child(String.valueOf(id));
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -139,7 +118,7 @@ public class DessertFirebase {
                 for (DataSnapshot dstSnapshot : dataSnapshot.getChildren()) {
                     Dessert dessert = dstSnapshot.getValue(Dessert.class);
 
-                    if (maxKey[0] < dessert.getId()){
+                    if (maxKey[0] < dessert.getId()) {
                         maxKey[0] = dessert.getId();
                     }
 
@@ -155,7 +134,7 @@ public class DessertFirebase {
         });
     }
 
-    public static void deleteDessert(int id, Model.SuccessListener listener){
+    public static void deleteDessert(int id, Model.SuccessListener listener) {
         database.getReference("desserts").child(String.valueOf(id)).removeValue();
     }
 }

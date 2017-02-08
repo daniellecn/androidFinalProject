@@ -1,7 +1,5 @@
 package com.example.finalproject.Model;
 
-import android.app.AlertDialog;
-
 /**
  * Created by Danielle Cohen on 17/01/2017.
  */

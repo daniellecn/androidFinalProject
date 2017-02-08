@@ -1,19 +1,9 @@
 package com.example.finalproject.Model;
 
 import android.content.ContentValues;
-import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
 import android.util.Log;
-
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -32,19 +22,19 @@ public class DessertSql {
 
     public static void create(SQLiteDatabase db) {
         db.execSQL("CREATE TABLE " + DESSERTS_TABLE + " (" +
-                ID          + " NUM PRIMARY KEY," +
-                NAME        + " TEXT," +
-                DESC        + " TEXT," +
-                IMAGE_URL   + " TEXT," +
-                COST        + " TEXT," +
-                DATES       + " TEXT );");
+                ID + " NUM PRIMARY KEY," +
+                NAME + " TEXT," +
+                DESC + " TEXT," +
+                IMAGE_URL + " TEXT," +
+                COST + " TEXT," +
+                DATES + " TEXT );");
     }
 
     public static void dropTable(SQLiteDatabase db) {
         db.execSQL("DROP TABLE " + DESSERTS_TABLE);
     }
 
-    public static void addDessert(SQLiteDatabase db, Dessert dessert){
+    public static void addDessert(SQLiteDatabase db, Dessert dessert) {
         ContentValues values = new ContentValues();
 
         // Set values
@@ -56,13 +46,13 @@ public class DessertSql {
         values.put(DATES, dessert.getDatesAvailable());
 
         // Add to local db
-        long rowId = db.insertWithOnConflict(DESSERTS_TABLE, ID, values,SQLiteDatabase.CONFLICT_REPLACE);
+        long rowId = db.insertWithOnConflict(DESSERTS_TABLE, ID, values, SQLiteDatabase.CONFLICT_REPLACE);
         if (rowId <= 0) {
-            Log.e("SQLite","fail to insert into student");
+            Log.e("SQLite", "fail to insert into student");
         }
     }
 
-    public static void updateDessert(SQLiteDatabase db, Dessert dessert){
+    public static void updateDessert(SQLiteDatabase db, Dessert dessert) {
         ContentValues values = new ContentValues();
 
         // Set values
@@ -79,19 +69,19 @@ public class DessertSql {
         // Add to local db
         long rowId = db.updateWithOnConflict(DESSERTS_TABLE, values, whereClause, whereArg, SQLiteDatabase.CONFLICT_REPLACE);
         if (rowId <= 0) {
-            Log.e("SQLite","fail to insert into student");
+            Log.e("SQLite", "fail to insert into student");
         }
     }
 
-    public static Dessert getDessertById(SQLiteDatabase db, String id)    {
+    public static Dessert getDessertById(SQLiteDatabase db, String id) {
         // Set the selection parameters
         String[] selectArg = {id};
 
         // Get the dessert
-        Cursor cursor = db.query(DESSERTS_TABLE, null, ID + " = ?", selectArg, null, null, null );
+        Cursor cursor = db.query(DESSERTS_TABLE, null, ID + " = ?", selectArg, null, null, null);
         Dessert dessert = null;
 
-        if (cursor.moveToFirst() == true){
+        if (cursor.moveToFirst() == true) {
             // Create the dessert object
             dessert = new Dessert(
                     cursor.getInt(cursor.getColumnIndex(ID)),
@@ -104,18 +94,18 @@ public class DessertSql {
         return dessert;
     }
 
-    public static List<Dessert> getDessertsBySearch(SQLiteDatabase db, String query){
+    public static List<Dessert> getDessertsBySearch(SQLiteDatabase db, String query) {
         // Set the selection parameters
         String[] selectArg = {"%" + query + "%", "%" + query + "%"};
 
         // Get the dessert
-        Cursor cursor = db.query(DESSERTS_TABLE, null, NAME + " LIKE ? OR " + DESC + " LIKE ?", selectArg, null, null, null );
+        Cursor cursor = db.query(DESSERTS_TABLE, null, NAME + " LIKE ? OR " + DESC + " LIKE ?", selectArg, null, null, null);
 
         // Create the list
         return getDessertListFromCourse(cursor);
     }
 
-    public static List<Dessert> getAllDesserts(SQLiteDatabase db){
+    public static List<Dessert> getAllDesserts(SQLiteDatabase db) {
         List<Dessert> dessertList = null;
 
         // Get all the desserts
@@ -125,12 +115,12 @@ public class DessertSql {
         return getDessertListFromCourse(cursor);
     }
 
-    private static List<Dessert> getDessertListFromCourse(Cursor cursor){
+    private static List<Dessert> getDessertListFromCourse(Cursor cursor) {
         Dessert dessert = null;
         List<Dessert> data = new LinkedList<Dessert>();
 
         // If data selected
-        if (cursor.moveToFirst()){
+        if (cursor.moveToFirst()) {
             // Get indexes
             int idIndex = cursor.getColumnIndex(ID);
             int nameIndex = cursor.getColumnIndex(NAME);
@@ -156,15 +146,15 @@ public class DessertSql {
         return data;
     }
 
-    public static double getLastUpdateDate(SQLiteDatabase db){
-        return LastUpdateSql.getLastUpdate(db,DESSERTS_TABLE);
+    public static double getLastUpdateDate(SQLiteDatabase db) {
+        return LastUpdateSql.getLastUpdate(db, DESSERTS_TABLE);
     }
 
-    public static void setLastUpdateDate(SQLiteDatabase db, double date){
-        LastUpdateSql.setLastUpdate(db,DESSERTS_TABLE, date);
+    public static void setLastUpdateDate(SQLiteDatabase db, double date) {
+        LastUpdateSql.setLastUpdate(db, DESSERTS_TABLE, date);
     }
 
-    public static void deleteDessert(int id, SQLiteDatabase db){
+    public static void deleteDessert(int id, SQLiteDatabase db) {
         // Set the where parameters
         String[] selectArg = {String.valueOf(id)};
 

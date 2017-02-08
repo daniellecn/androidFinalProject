@@ -1,19 +1,9 @@
 package com.example.finalproject.Model;
 
 import android.content.Context;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
-import android.graphics.Bitmap;
-import android.net.Uri;
-import android.os.Environment;
-import android.util.Log;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -29,36 +19,36 @@ public class ModelSql {
         helper.onUpgrade(getWritableDB(), 7, 7);
     }
 
-    public SQLiteDatabase getWritableDB(){
+    public SQLiteDatabase getWritableDB() {
         return helper.getWritableDatabase();
     }
 
-    public SQLiteDatabase getReadbleDB(){
+    public SQLiteDatabase getReadbleDB() {
         return helper.getReadableDatabase();
     }
 
-    public void addDessert(Dessert dessert){
+    public void addDessert(Dessert dessert) {
         DessertSql.addDessert(helper.getWritableDatabase(), dessert);
     }
 
-    public void updateDessert(Dessert dessert){
+    public void updateDessert(Dessert dessert) {
         DessertSql.updateDessert(helper.getWritableDatabase(), dessert);
     }
 
-    public Dessert getDessertById(int id){
+    public Dessert getDessertById(int id) {
         return DessertSql.getDessertById(helper.getReadableDatabase(), String.valueOf(id));
     }
 
-    public List<Dessert> getAllDesserts(){
+    public List<Dessert> getAllDesserts() {
         return DessertSql.getAllDesserts(helper.getReadableDatabase());
     }
 
-    public void deleteDessert(int id){
+    public void deleteDessert(int id) {
         DessertSql.deleteDessert(id, getWritableDB());
         ImageLocal.deleteLocalImage(String.valueOf(id));
     }
 
-    public List<Dessert> getBySearch(String query){
+    public List<Dessert> getBySearch(String query) {
         return DessertSql.getDessertsBySearch(helper.getReadableDatabase(), query);
     }
 

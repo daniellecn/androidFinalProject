@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name"></string>
+    <string name="app_name">The bakery</string>
 
     <!-- Buttons text -->
     <string name="login">LOGIN</string>

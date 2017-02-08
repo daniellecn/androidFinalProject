@@ -3,11 +3,8 @@ package com.example.finalproject.Activities;
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.util.Log;
 
 import com.example.finalproject.Fragments.LoginFragment;
-import com.example.finalproject.Fragments.SignupFragment;
-import com.example.finalproject.Model.Model;
 import com.example.finalproject.R;
 
 public class LoginActivity extends Activity {

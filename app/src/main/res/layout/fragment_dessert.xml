@@ -1,84 +1,83 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    style="@style/AppTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:fillViewport="true"
-    style="@style/AppTheme"
+    android:orientation="vertical"
     tools:context="com.example.finalproject.Fragments.DessertFragment">
 
     <TableLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
 
-        <TableRow
-            android:layout_margin="10dp">
+        <TableRow android:layout_margin="10dp">
+
             <ImageView
+                android:id="@+id/dishImg"
                 android:layout_width="match_parent"
                 android:layout_height="180dp"
-                android:gravity="center"
-                android:id="@+id/dishImg"
-                android:src="@drawable/image_placeholder"
-                android:scaleType="centerCrop"
                 android:adjustViewBounds="true"
-                />
+                android:gravity="center"
+                android:scaleType="centerCrop"
+                android:src="@drawable/image_placeholder" />
         </TableRow>
 
-        <TableRow
-            android:layout_margin="10dp">
+        <TableRow android:layout_margin="10dp">
+
             <TextView
+                android:id="@+id/dishLable"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:text="Macrons"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:textSize="22dp"
-                android:textStyle="bold"
-                android:id="@+id/dishLable" />
+                android:textStyle="bold" />
         </TableRow>
 
-        <TableRow
-            android:layout_margin="10dp">
+        <TableRow android:layout_margin="10dp">
+
             <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
                 android:id="@+id/dishDesc"
-                android:textSize="18dp"/>
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textSize="18dp" />
         </TableRow>
 
-        <TableRow
-            android:layout_margin="10dp">
+        <TableRow android:layout_margin="10dp">
+
             <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:text="@string/cost"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:textStyle="bold"
-                android:layout_weight="1"
-                android:textSize="18dp"/>
+                android:textSize="18dp"
+                android:textStyle="bold" />
 
             <TextView
-                android:text="1.5$"
+                android:id="@+id/dishCost"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/dishCost"
-                android:textSize="18dp"/>
+                android:text="1.5$"
+                android:textSize="18dp" />
         </TableRow>
 
-        <TableRow
-            android:layout_margin="10dp">
+        <TableRow android:layout_margin="10dp">
+
             <TextView
-                android:text="@string/dates"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:textStyle="bold"
-                android:textSize="18dp"/>
+                android:text="@string/dates"
+                android:textSize="18dp"
+                android:textStyle="bold" />
 
             <TextView
-                android:text="01.01.2016-01.02.2016"
+                android:id="@+id/dishDates"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="18dp"
+                android:text="01.01.2016-01.02.2016"
 
-                android:id="@+id/dishDates"/>
+                android:textSize="18dp" />
         </TableRow>
 
     </TableLayout>

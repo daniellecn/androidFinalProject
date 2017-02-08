@@ -1,15 +1,10 @@
 package com.example.finalproject.Activities;
 
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.os.Bundle;
 import android.app.Activity;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 
 import com.example.finalproject.Fragments.DessertFragment;
-import com.example.finalproject.Model.Dessert;
 import com.example.finalproject.Model.Model;
 import com.example.finalproject.R;
 
@@ -26,7 +21,6 @@ public class DessertActivity extends Activity {
         FragmentTransaction transaction = getFragmentManager().beginTransaction();
         transaction.add(R.id.dishContainer, fragment);
         transaction.commit();
-
 
         // Action bar
         getActionBar().setIcon(R.color.colorPrimaryDark);

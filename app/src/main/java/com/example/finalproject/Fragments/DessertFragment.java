@@ -3,7 +3,6 @@ package com.example.finalproject.Fragments;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -12,13 +11,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
-
-import com.example.finalproject.Activities.AddDessertActivity;
-import com.example.finalproject.Activities.DessertListActivity;
 import com.example.finalproject.Model.Dessert;
 import com.example.finalproject.Model.Model;
 import com.example.finalproject.R;
@@ -54,7 +48,8 @@ public class DessertFragment extends Fragment {
             }
 
             @Override
-            public void onFail() { }
+            public void onFail() {
+            }
         });
 
         ((TextView) view.findViewById(R.id.dishLable)).setText(getCurrentDessert().getName());
@@ -62,10 +57,9 @@ public class DessertFragment extends Fragment {
         ((TextView) view.findViewById(R.id.dishCost)).setText(getCurrentDessert().getCost());
 
         // If not chosen dates
-        if (getCurrentDessert().getDatesAvailable().equals(getString(R.string.enter_dates))){
+        if (getCurrentDessert().getDatesAvailable().equals(getString(R.string.enter_dates))) {
             ((TextView) view.findViewById(R.id.dishDates)).setText("");
-        }
-        else{
+        } else {
             ((TextView) view.findViewById(R.id.dishDates)).setText(getCurrentDessert().getDatesAvailable());
         }
 
@@ -80,17 +74,16 @@ public class DessertFragment extends Fragment {
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.edit_menu, menu);
 
-        if (!Model.instance().getConnectedUser().isAdmin()){
+        if (!Model.instance().getConnectedUser().isAdmin()) {
             menu.removeItem(R.id.menuEdit);
         }
-        super.onCreateOptionsMenu(menu,inflater);
+        super.onCreateOptionsMenu(menu, inflater);
     }
 
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle item selection
         switch (item.getItemId()) {
-            case R.id.menuEdit:
-            {
+            case R.id.menuEdit: {
                 // Create edit dessert fragment
                 AddDessertFragment fragment = new AddDessertFragment();
                 fragment.setNewDessert(currentDessert);

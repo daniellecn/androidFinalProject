@@ -18,7 +18,7 @@ import com.example.finalproject.R;
  * Created by Danielle Cohen on 24/01/2017.
  */
 
-public class DateRangePickerFragment extends DialogFragment implements View.OnClickListener{
+public class DateRangePickerFragment extends DialogFragment implements View.OnClickListener {
 
     private OnDateRangeSelectedListener onDateRangeSelectedListener;
 
@@ -43,7 +43,6 @@ public class DateRangePickerFragment extends DialogFragment implements View.OnCl
         onDateRangeSelectedListener = callback;
         this.is24HourMode = is24HourMode;
     }
-
 
 
     @Override
@@ -91,8 +90,8 @@ public class DateRangePickerFragment extends DialogFragment implements View.OnCl
     @Override
     public void onClick(View v) {
         dismiss();
-        onDateRangeSelectedListener.onDateRangeSelected(startDatePicker.getDayOfMonth(),startDatePicker.getMonth() + 1,startDatePicker.getYear(),
-                endDatePicker.getDayOfMonth(),endDatePicker.getMonth() + 1,endDatePicker.getYear());
+        onDateRangeSelectedListener.onDateRangeSelected(startDatePicker.getDayOfMonth(), startDatePicker.getMonth() + 1, startDatePicker.getYear(),
+                endDatePicker.getDayOfMonth(), endDatePicker.getMonth() + 1, endDatePicker.getYear());
     }
 
     public interface OnDateRangeSelectedListener {

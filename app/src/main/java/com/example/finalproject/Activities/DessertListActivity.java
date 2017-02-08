@@ -7,13 +7,10 @@ import android.os.Bundle;
 import android.app.Activity;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
-
-import com.example.finalproject.Fragments.AddDessertFragment;
 import com.example.finalproject.Model.Model;
 import com.example.finalproject.R;
 
@@ -29,7 +26,7 @@ public class DessertListActivity extends Activity {
         getActionBar().setIcon(R.color.colorPrimaryDark);
 
         // check if need to display the add button
-        if (Model.instance().getConnectedUser().isAdmin()){
+        if (Model.instance().getConnectedUser().isAdmin()) {
             ((ImageView) findViewById(R.id.add_new)).setVisibility(View.VISIBLE);
         }
     }

@@ -14,11 +14,9 @@ import android.graphics.drawable.BitmapDrawable;
 import android.media.ExifInterface;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.content.FileProvider;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,10 +36,7 @@ import com.example.finalproject.Model.Dessert;
 import com.example.finalproject.Model.Model;
 import com.example.finalproject.R;
 
-
-import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 
 
 import static android.app.Activity.RESULT_OK;
@@ -52,7 +47,6 @@ import static android.app.Activity.RESULT_OK;
 public class AddDessertFragment extends Fragment implements DateRangePickerFragment.OnDateRangeSelectedListener {
     protected static final int CAMERA_REQUEST = 0;
     protected static final int GALLERY_PICTURE = 1;
-    protected static final int PICK_CAMERA_IMAGE = 0;
 
     protected static final int ADD_MODE = 0;
     protected static final int EDIT_MODE = 1;
@@ -128,7 +122,8 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                 }
 
                 @Override
-                public void onFail() {}
+                public void onFail() {
+                }
             });
 
             mode = EDIT_MODE;
@@ -161,7 +156,6 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuSave: {
-                progressBar.setVisibility(getView().VISIBLE);
                 // Update the dessert object
                 getNewDessert().setName(((EditText) getView().findViewById(R.id.addLable)).getText().toString());
                 getNewDessert().setDescription(((EditText) getView().findViewById(R.id.addDesc)).getText().toString());
@@ -170,36 +164,37 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                 selectedImageBitmap = ((BitmapDrawable) ((ImageView) getView().findViewById(R.id.addImg)).getDrawable()).getBitmap();
 
                 // validation
-                if (getNewDessert().getName() == null){
-                    ((EditText)getView().findViewById(R.id.addLable)).setError(getString(R.string.emptyField));
-                }
+                if ((getNewDessert().getName() == null) || (getNewDessert().getName().equals(""))) {
+                    ((EditText) getView().findViewById(R.id.addLable)).setError(getString(R.string.emptyField));
+                } else {
 
-                // If there is not need to update the image
-                if (oldImageBitmap == selectedImageBitmap) {
-                    selectedImageBitmap = null;
-                }
-
-                // Add / update the dessert
-                Model.instance().addDessert(getNewDessert(), selectedImageBitmap, new Model.SuccessListener() {
-                    @Override
-                    public void onResult(boolean result) {
-                        if (result) {
-                            // Display message
-                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.updateSuccessfuly),
-                                    Toast.LENGTH_SHORT).show();
-
-                            getActivity().finish();
-                            // Return to the list activity
-                            Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
-                            startActivity(intent);
-                        } else {
-                            // Display message
-                            Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errorOccure),
-                                    Toast.LENGTH_SHORT).show();
-                        }
+                    // If there is not need to update the image
+                    if (oldImageBitmap == selectedImageBitmap) {
+                        selectedImageBitmap = null;
                     }
-                });
-                progressBar.setVisibility(getView().GONE);
+                    progressBar.setVisibility(getView().VISIBLE);
+                    // Add / update the dessert
+                    Model.instance().addDessert(getNewDessert(), selectedImageBitmap, new Model.SuccessListener() {
+                        @Override
+                        public void onResult(boolean result) {
+                            if (result) {
+                                // Display message
+                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.updateSuccessfuly),
+                                        Toast.LENGTH_SHORT).show();
+
+                                getActivity().finish();
+                                // Return to the list activity
+                                Intent intent = new Intent(getActivity().getApplicationContext(), DessertListActivity.class);
+                                startActivity(intent);
+                            } else {
+                                // Display message
+                                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errorOccure),
+                                        Toast.LENGTH_SHORT).show();
+                            }
+                            progressBar.setVisibility(getView().GONE);
+                        }
+                    });
+                }
                 return true;
             }
             case R.id.menuDel:
@@ -252,26 +247,8 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                                     CAMERA_REQUEST);
                         } else {
 
-                           // Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                           // File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
-                           // intent.putExtra(MediaStore.EXTRA_OUTPUT,
-                             //       Uri.fromFile(photo));
-                            //imageUri = Uri.fromFile(photo);
-                            //startActivityForResult(intent, TAKE_PICTURE);
-
-                            String name = String.valueOf(getNewDessert().getId() + 1);
-                            File destination = new File(Environment
-                                    .getExternalStorageDirectory(), name + getString(R.string.jpg));
-
-                            Uri photoURI = FileProvider.getUriForFile(AppContext.getAppContext(),
-                                    AppContext.getAppContext().getApplicationContext().getPackageName() + getString(R.string.provider),
-                                    destination);
-
-                            // Uri photoURI =  Uri.fromFile(destination);
-
-                            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-                            startActivityForResult(intent, PICK_CAMERA_IMAGE);
+                            Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                            startActivityForResult(cameraIntent, CAMERA_REQUEST);
 
                         }
                     }
@@ -326,7 +303,8 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
 
         selectedImagePath = null;
 
-        if (resultCode == RESULT_OK && requestCode == GALLERY_PICTURE) {
+        if ((resultCode == RESULT_OK && requestCode == GALLERY_PICTURE) ||
+                (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST)) {
             if (intent != null) {
                 /** Get the selected image path **/
                 Uri selectedImage = intent.getData();
@@ -338,69 +316,51 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                 selectedImagePath = cursor.getString(columnIndex);
                 cursor.close();
             }
-        } else if (resultCode == RESULT_OK && requestCode == CAMERA_REQUEST) {
-            /** Get the new image path **/
-            File file = new File(Environment.getExternalStorageDirectory().toString());
 
-            for (File temp : file.listFiles()) {
-                if (temp.getName().equals(String.valueOf(getNewDessert().getId() + ".jpg"))) {
-                    file = temp;
-                    break;
-                }
-            }
+            // Creating the bitmap and make the changes
+            if (selectedImagePath != null) {
+                /** Get selected image as bitmap **/
+                BitmapFactory.Options options = new BitmapFactory.Options();
+                options.inPreferredConfig = Bitmap.Config.ARGB_8888;
+                selectedImageBitmap = BitmapFactory.decodeFile(selectedImagePath);
+                selectedImageBitmap = Bitmap.createScaledBitmap(selectedImageBitmap, 768, 1024, false);
 
-            // If the new image was not found
-            if (!file.exists()) {
-                Toast.makeText(getActivity().getApplicationContext(),
-                        R.string.errorImage, Toast.LENGTH_LONG).show();
-                return;
-            } else {
-                selectedImagePath = file.getAbsolutePath();
-            }
-        }
+                /** Rotating image **/
+                int rotate = 0;
+                try {
+                    ExifInterface exifInterface = new ExifInterface(selectedImagePath);
+                    int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
-        // Creating the bitmap and make the changes
-        if (selectedImagePath != null) {
-            /** Get selected image as bitmap **/
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inPreferredConfig = Bitmap.Config.ARGB_8888;
-            selectedImageBitmap = BitmapFactory.decodeFile(selectedImagePath);
+                    switch (orientation) {
+                        case ExifInterface.ORIENTATION_ROTATE_270:
+                            rotate = 270;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_180:
+                            rotate = 180;
+                            break;
+                        case ExifInterface.ORIENTATION_ROTATE_90:
+                            rotate = 90;
+                            break;
+                    }
 
-            /** Rotating image **/
-            int rotate = 0;
-            try {
-                ExifInterface exifInterface = new ExifInterface(selectedImagePath);
-                int orientation = exifInterface.getAttributeInt(ExifInterface.TAG_ORIENTATION, ExifInterface.ORIENTATION_NORMAL);
 
-                switch (orientation) {
-                    case ExifInterface.ORIENTATION_ROTATE_270:
-                        rotate = 270;
-                        break;
-                    case ExifInterface.ORIENTATION_ROTATE_180:
-                        rotate = 180;
-                        break;
-                    case ExifInterface.ORIENTATION_ROTATE_90:
-                        rotate = 90;
-                        break;
+                    Matrix matrix = new Matrix();
+                    matrix.postRotate(rotate);
+                    selectedImageBitmap = Bitmap.createBitmap(selectedImageBitmap, 0, 0, selectedImageBitmap.getWidth(),
+                            selectedImageBitmap.getHeight(), matrix, true);
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    Toast.makeText(getActivity().getApplicationContext(),
+                            R.string.errorImage, Toast.LENGTH_LONG).show();
+                    return;
                 }
 
-
-                Matrix matrix = new Matrix();
-                matrix.postRotate(rotate);
-                selectedImageBitmap = Bitmap.createBitmap(selectedImageBitmap, 0, 0, selectedImageBitmap.getWidth(),
-                        selectedImageBitmap.getHeight(), matrix, true);
-
-            } catch (IOException e) {
-                e.printStackTrace();
-                Toast.makeText(getActivity().getApplicationContext(),
-                        R.string.errorImage, Toast.LENGTH_LONG).show();
-                return;
+                /** Update the screen **/
+                ImageView dessertImage = (ImageView) getView().findViewById(R.id.addImg);
+                dessertImage.setImageBitmap(selectedImageBitmap);
+                progressBar.setVisibility(getView().GONE);
             }
-
-            /** Update the screen **/
-            ImageView dessertImage = (ImageView) getView().findViewById(R.id.addImg);
-            dessertImage.setImageBitmap(selectedImageBitmap);
-            progressBar.setVisibility(getView().GONE);
         }
     }
 }
