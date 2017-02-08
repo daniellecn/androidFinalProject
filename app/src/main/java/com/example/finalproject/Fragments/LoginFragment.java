@@ -11,8 +11,10 @@ import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -26,7 +28,7 @@ import com.example.finalproject.R;
  * A simple {@link Fragment} subclass.
  */
 public class LoginFragment extends Fragment {
-    //ProgressBar progressBar;
+    ProgressBar progressBar;
 
     public LoginFragment() {
         // Required empty public constructor
@@ -41,8 +43,15 @@ public class LoginFragment extends Fragment {
 
         // Inflate the layout for this fragment
         final View view = inflater.inflate(R.layout.fragment_login, container, false);
-        //progressBar = (ProgressBar) view.findViewById(R.id.loginProgressBar);
-        //progressBar.setVisibility(view.GONE);
+
+        // Set the progress bar
+        progressBar = (ProgressBar) view.findViewById(R.id.loginProgressBar);
+        progressBar.setVisibility(view.GONE);
+
+        // Set the focus (closing the keyboard)
+        ((ImageView) view.findViewById(R.id.imageView)).setFocusable(true);
+        ((ImageView) view.findViewById(R.id.imageView)).setFocusableInTouchMode(true);
+
 
         TextView signupText = (TextView) view.findViewById(R.id.loginSignup);
         signupText.setOnClickListener(new View.OnClickListener() {
@@ -64,7 +73,7 @@ public class LoginFragment extends Fragment {
 
                 final User user = new User (name.getText().toString(), pass.getText().toString());
 
-                //progressBar.setVisibility(view.VISIBLE);
+                progressBar.setVisibility(view.VISIBLE);
                 Model.instance().logIn(user, new Model.LogInListener() {
                     @Override
                     public void onComplete(boolean isLogIn) {
@@ -81,14 +90,11 @@ public class LoginFragment extends Fragment {
                             Toast toast = Toast.makeText(context, text, duration);
                             toast.show();
                         }
-                        //progressBar.setVisibility(view.GONE);
+                        progressBar.setVisibility(view.GONE);
                     }
                 });
             }
         });
-        ((EditText) view.findViewById(R.id.loginName)).setText("1");
-        ((EditText) view.findViewById(R.id.loginPassword)).setText("1");
-        //loginButton.callOnClick();
 
         return view;
     }

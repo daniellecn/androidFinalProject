@@ -28,6 +28,7 @@ import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -62,6 +63,8 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
     private Bitmap oldImageBitmap;
     private Bitmap selectedImageBitmap;
 
+    ProgressBar progressBar;
+
     public AddDessertFragment() {
         // Required empty public constructor
     }
@@ -83,6 +86,10 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
         // Action bar
         getActivity().getActionBar().setDisplayHomeAsUpEnabled(false);
         setHasOptionsMenu(true);
+
+        // Set the progress bar
+        progressBar = (ProgressBar) view.findViewById(R.id.addProgressBar);
+        progressBar.setVisibility(view.GONE);
 
         // Camera button
         ImageButton addImage = (ImageButton) view.findViewById(R.id.addNew);
@@ -154,6 +161,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
         // Handle item selection
         switch (item.getItemId()) {
             case R.id.menuSave: {
+                progressBar.setVisibility(getView().VISIBLE);
                 // Update the dessert object
                 getNewDessert().setName(((EditText) getView().findViewById(R.id.addLable)).getText().toString());
                 getNewDessert().setDescription(((EditText) getView().findViewById(R.id.addDesc)).getText().toString());
@@ -186,6 +194,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                         }
                     }
                 });
+                progressBar.setVisibility(getView().GONE);
                 return true;
             }
             case R.id.menuDel:
@@ -307,7 +316,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent intent) {
-
+        progressBar.setVisibility(getView().VISIBLE);
         super.onActivityResult(requestCode, resultCode, intent);
 
         selectedImagePath = null;
@@ -386,6 +395,7 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
             /** Update the screen **/
             ImageView dessertImage = (ImageView) getView().findViewById(R.id.addImg);
             dessertImage.setImageBitmap(selectedImageBitmap);
+            progressBar.setVisibility(getView().GONE);
         }
     }
 }

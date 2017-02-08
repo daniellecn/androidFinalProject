@@ -40,7 +40,7 @@ public class DessertListFragment extends ListFragment {
 
     List<Dessert> dessertListData;
 
-    //ProgressBar progressBar;
+    ProgressBar progressBar;
     DesseertAdapter adapter;
 
     public DessertListFragment() {
@@ -72,7 +72,7 @@ public class DessertListFragment extends ListFragment {
         /** END Check permissions ***/
 
         // Get elements from screen
-        //progressBar = (ProgressBar) view.findViewById(R.id.listProgressBar);
+        progressBar = (ProgressBar) view.findViewById(R.id.listProgressBar);
 
         adapter = new DesseertAdapter();
         setListAdapter(adapter);
@@ -94,19 +94,20 @@ public class DessertListFragment extends ListFragment {
         if (requestCode == NEW_DESSERT_REQUEST) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
+                // Display progress bar
+                progressBar.setVisibility(View.VISIBLE);
                 loadDessertsListData();
             }
         }
     }
 
     private void loadDessertsListData() {
-        // Display progress bar
-        //progressBar.setVisibility(View.VISIBLE);
         Model.instance().getAllDessertAsynch(new Model.GetAllDessertsAsynchListener() {
             @Override
-            public void onComplete(List<Dessert> dessertList) {
+            public void onComplete(List<Dessert> dessertList){
+
                 // Cancel progress bar
-                //progressBar.setVisibility(View.GONE);
+                progressBar.setVisibility(View.GONE);
 
                 // Update list data
                 dessertListData = dessertList;

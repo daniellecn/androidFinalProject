@@ -98,17 +98,6 @@ public class Model {
 
     public List<Dessert> getDessertData() {
         return dessertData;
-//        getAllDessertAsynch(new GetAllDessertsAsynchListener() {
-//            @Override
-//            public void onComplete(List<Dessert> dessertList) {
-//                listener.onComplete(dessertList);
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                listener.onCancel();
-//            }
-//        });
     }
 
     public void logIn(User user, LogInListener listener){
