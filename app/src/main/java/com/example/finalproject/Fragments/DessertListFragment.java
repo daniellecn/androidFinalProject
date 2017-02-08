@@ -3,6 +3,7 @@ package com.example.finalproject.Fragments;
 
 import android.Manifest;
 import android.app.ListFragment;
+import android.app.SearchManager;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -17,6 +18,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
+import android.widget.SearchView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,7 +50,6 @@ public class DessertListFragment extends ListFragment {
         dessertListData = Model.instance().getDessertData();
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -77,7 +78,13 @@ public class DessertListFragment extends ListFragment {
         adapter = new DesseertAdapter();
         setListAdapter(adapter);
 
-        loadDessertsListData();
+        if (Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) {
+            String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
+            dessertListData = Model.instance().getBySearch(query);
+        }
+        else{
+            loadDessertsListData();
+        }
 
         return super.onCreateView(inflater, container, savedInstanceState);
     }

@@ -58,6 +58,10 @@ public class ModelSql {
         ImageLocal.deleteLocalImage(String.valueOf(id));
     }
 
+    public List<Dessert> getBySearch(String query){
+        return DessertSql.getDessertsBySearch(helper.getReadableDatabase(), query);
+    }
+
     class Helper extends SQLiteOpenHelper {
 
 

@@ -243,4 +243,8 @@ public class Model {
     public void isUserMailExist(String userMail, Model.SuccessListener listener){
         remote.isUserMailExist(userMail, listener);
     }
+
+    public List<Dessert> getBySearch(String query){
+        return local.getBySearch(query);
+    }
 }

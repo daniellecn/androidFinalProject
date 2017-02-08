@@ -104,6 +104,17 @@ public class DessertSql {
         return dessert;
     }
 
+    public static List<Dessert> getDessertsBySearch(SQLiteDatabase db, String query){
+        // Set the selection parameters
+        String[] selectArg = {"%" + query + "%", "%" + query + "%"};
+
+        // Get the dessert
+        Cursor cursor = db.query(DESSERTS_TABLE, null, NAME + " LIKE ? OR " + DESC + " LIKE ?", selectArg, null, null, null );
+
+        // Create the list
+        return getDessertListFromCourse(cursor);
+    }
+
     public static List<Dessert> getAllDesserts(SQLiteDatabase db){
         List<Dessert> dessertList = null;
 

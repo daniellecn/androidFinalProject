@@ -44,13 +44,19 @@
             android:name=".Activities.DessertActivity"
             android:label="@string/title_activity_dish"
             android:parentActivityName=".Activities.DessertListActivity"/>
+
         <activity
             android:name=".Activities.DessertListActivity"
             android:label="@string/title_activity_list_dish">
-            <meta-data
-                android:name="android.app.searchable"
-                android:resource="@xml/searchable"></meta-data>
+
+            <meta-data android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+
         </activity>
+
         <activity
             android:name=".Activities.AddDessertActivity"
             android:label=""
