@@ -24,7 +24,6 @@ public class UserFirebase {
                 User readUser = dataSnapshot.getValue(User.class);
 
                 if ((readUser != null) && (user.getPassword().equals(readUser.getPassword()))){
-                    // TODO: return the user to the model
                     Model.instance().setConnectedUser(readUser);
                     listener.onComplete(true);
                 }

@@ -18,6 +18,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.finalproject.Activities.DessertActivity;
 import com.example.finalproject.Model.AppContext;
@@ -45,17 +46,6 @@ public class DessertListFragment extends ListFragment {
     public DessertListFragment() {
         // Required empty public constructor
         dessertListData = Model.instance().getDessertData();
-//        Model.instance().getDessertData(new Model.GetAllDessertsAsynchListener() {
-//            @Override
-//            public void onComplete(List<Dessert> dessertList) {
-//                dessertListData = dessertList;
-//            }
-//
-//            @Override
-//            public void onCancel() {
-//                // TODO: message
-//            }
-//        });
     }
 
 
@@ -109,7 +99,7 @@ public class DessertListFragment extends ListFragment {
         }
     }
 
-    private void loadDessertsListData(){
+    private void loadDessertsListData() {
         // Display progress bar
         //progressBar.setVisibility(View.VISIBLE);
         Model.instance().getAllDessertAsynch(new Model.GetAllDessertsAsynchListener() {
@@ -127,7 +117,9 @@ public class DessertListFragment extends ListFragment {
 
             @Override
             public void onCancel() {
-                // TODO: message
+                // Display message
+                Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errorOccure),
+                        Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -151,9 +143,9 @@ public class DessertListFragment extends ListFragment {
 
         @Override
         public View getView(final int i, View view, ViewGroup viewGroup) {
-            if (view == null){
+            if (view == null) {
                 LayoutInflater inflater = LayoutInflater.from(getActivity());
-                view = inflater.inflate(R.layout.dessert_list_row,null);
+                view = inflater.inflate(R.layout.dessert_list_row, null);
             }
 
             final Dessert dessert = dessertListData.get(i);
@@ -170,7 +162,9 @@ public class DessertListFragment extends ListFragment {
 
                 @Override
                 public void onFail() {
-                    // TODO : message
+                    // Display message
+                    Toast.makeText(getActivity().getApplicationContext(), getString(R.string.errorOccure),
+                            Toast.LENGTH_SHORT).show();
                 }
 
             });

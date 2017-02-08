@@ -54,9 +54,7 @@ public class DessertFragment extends Fragment {
             }
 
             @Override
-            public void onFail() {
-                // TODO: default image
-            }
+            public void onFail() { }
         });
 
         ((TextView) view.findViewById(R.id.dishLable)).setText(getCurrentDessert().getName());

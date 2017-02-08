@@ -116,14 +116,12 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
             Model.instance().getDessertImage(getNewDessert(), 0, new Model.GetImageListener() {
                 @Override
                 public void onSuccess(Bitmap image) {
-                    ((ImageView) view.findViewById(R.id.addImg)).setImageBitmap(image);//Bitmap.createScaledBitmap(image, image.getWidth(), 180, false));
+                    ((ImageView) view.findViewById(R.id.addImg)).setImageBitmap(image);
                     oldImageBitmap = image;
                 }
 
                 @Override
-                public void onFail() {
-                    // TODO: default image
-                }
+                public void onFail() {}
             });
 
             mode = EDIT_MODE;
@@ -240,6 +238,13 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                                     CAMERA_REQUEST);
                         } else {
 
+                           // Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                           // File photo = new File(Environment.getExternalStorageDirectory(),  "Pic.jpg");
+                           // intent.putExtra(MediaStore.EXTRA_OUTPUT,
+                             //       Uri.fromFile(photo));
+                            //imageUri = Uri.fromFile(photo);
+                            //startActivityForResult(intent, TAKE_PICTURE);
+
                             String name = String.valueOf(getNewDessert().getId() + 1);
                             File destination = new File(Environment
                                     .getExternalStorageDirectory(), name + getString(R.string.jpg));
@@ -247,6 +252,8 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                             Uri photoURI = FileProvider.getUriForFile(AppContext.getAppContext(),
                                     AppContext.getAppContext().getApplicationContext().getPackageName() + getString(R.string.provider),
                                     destination);
+
+                            // Uri photoURI =  Uri.fromFile(destination);
 
                             Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                             intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
