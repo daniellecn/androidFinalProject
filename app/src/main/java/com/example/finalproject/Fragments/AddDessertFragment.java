@@ -169,6 +169,11 @@ public class AddDessertFragment extends Fragment implements DateRangePickerFragm
                 getNewDessert().setDatesAvailable(((TextView) getView().findViewById(R.id.addDates)).getText().toString());
                 selectedImageBitmap = ((BitmapDrawable) ((ImageView) getView().findViewById(R.id.addImg)).getDrawable()).getBitmap();
 
+                // validation
+                if (getNewDessert().getName() == null){
+                    ((EditText)getView().findViewById(R.id.addLable)).setError(getString(R.string.emptyField));
+                }
+
                 // If there is not need to update the image
                 if (oldImageBitmap == selectedImageBitmap) {
                     selectedImageBitmap = null;
