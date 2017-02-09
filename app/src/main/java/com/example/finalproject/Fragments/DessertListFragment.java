@@ -80,6 +80,7 @@ public class DessertListFragment extends ListFragment {
         if (Intent.ACTION_SEARCH.equals(getActivity().getIntent().getAction())) {
             String query = getActivity().getIntent().getStringExtra(SearchManager.QUERY);
             dessertListData = Model.instance().getBySearch(query);
+
         } else {
             loadDessertsListData();
         }

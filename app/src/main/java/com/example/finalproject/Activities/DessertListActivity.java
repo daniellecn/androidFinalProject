@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SearchView;
+
 import com.example.finalproject.Model.Model;
 import com.example.finalproject.R;
 
@@ -41,6 +42,7 @@ public class DessertListActivity extends Activity {
                 (SearchManager) getSystemService(Context.SEARCH_SERVICE);
         SearchView searchView =
                 (SearchView) menu.findItem(R.id.search).getActionView();
+
         searchView.setSearchableInfo(
                 searchManager.getSearchableInfo(getComponentName()));
 
